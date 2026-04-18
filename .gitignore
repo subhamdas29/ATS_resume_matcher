@@ -32,3 +32,4 @@ sdist/
 var/
 wheels/
 *.egg-info/
+media/
