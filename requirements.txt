@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
-sqlalchemy
 pydantic
 pyPDF2
 nltk
+sentence_transformers

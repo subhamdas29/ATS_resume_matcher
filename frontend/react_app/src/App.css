@@ -1,0 +1,180 @@
+.container{
+  margin :0 ;
+  padding : 0 ;
+  background: linear-gradient(
+  135deg,
+  #1e3c72,
+  #2a5298
+);
+  width : 100%;
+  min-height :100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.header{
+  background-color: rgb(123, 218, 241);
+  margin: 0;
+  padding : 0 ;
+  height : 70px;
+  width : 100%;
+  display: flex;
+  position: fixed;
+  top: 0;        
+  left: 0;       
+  z-index: 1000;
+}
+.navbar {
+  list-style: none;
+  display : flex ;
+  gap : 30px ;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right : 100px ;
+  flex: 1;
+}
+.navbar li a {
+  color : rgb(2, 15, 14);
+  text-decoration: none;
+  font-size: 18px;
+}
+.navbar li a:hover {
+  color : #a8dadc ;
+}
+.logo{
+  display: flex;
+  font-size: 18px;
+  justify-content: flex-start;
+  align-items: center;
+  flex:1;
+  padding-left : 50px ;
+  color : rgb(0, 0, 0);
+
+  
+}
+.home{
+  margin-top: 150px;
+  width : 100% ;
+  min-height : calc(100vh - 70px) ;
+  color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.head1{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size : 50px;
+  height :100px;
+  width : 100%;
+  color : white;
+}
+.head2{
+  color : #90e0ef;
+  height: 100px;
+  width : 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
+.head3{
+  color: #a8dadc;
+  font-size : 20px;
+  height: 50px;
+  width : 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top : 20px ;
+  height: 200px;
+  width: 100%;
+  gap : 100px ;
+}
+.explore-btn{
+  height : 50px;
+  width : 150px;
+  cursor: pointer;
+}
+.explore-btn:hover{
+  background: #35d1c4;
+}
+.guide-btn{
+  height : 50px;
+  width : 150px;
+  cursor: pointer;
+
+}
+.guide-btn:hover{
+  background: #35d1c4;
+}
+.explore-btn, .guide-btn{
+  border : none ;
+  border-radius : 5px ;
+  background : #ffffff ;
+  color : rgb(0, 0, 0) ;
+  font-size : 18px ;
+}
+.analyse{
+  width : 100% ;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: start;
+  gap: 100px ;
+}
+.upload {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  height : 350px ;
+  width : 320px ;
+  text-align: center ;
+  padding : 30px;
+  font-size: 22px;
+  border-radius: 15px;
+}
+
+.job-title{
+  width : 450px ;
+  height : 50px ;
+  padding : 10px ;
+  border : none ;
+  border-radius: 10px;
+  font-size: 18px;
+}
+.job-description{
+  width : 450px ;
+  height : 230px ;
+  padding : 10px ;
+  border : none ;
+  border-radius: 15px;
+  font-size: 18px;
+}
+.hero{
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 30px;
+
+}
+
+.act{
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap : 50px ;
+  width : 100% ;
+  height : 70px;
+  margin : 0 ;
+  padding : 0;
+}
