@@ -1,79 +1,51 @@
 from keywords import get_keywords
 from texts import get_texts, split_into_sections
-from sentence_transformers import SentenceTransformer, util
+from suggestions import resume_analyzer
+from similarities import get_similarity_score
+
+
 
 def main():
 
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    
 
     #PDF to Text extraction
     extracted_text=get_texts()
 
     #Extracted texts filled into different sections
-    extracted_sections=split_into_sections(extracted_text)
+    # extracted_sections=split_into_sections(extracted_text)
 
 
     #Text to Keywords extraction
-    resume_keywords = set(get_keywords(extracted_text))
+    resume_keywords = (get_keywords(extracted_text))
 
     job_description="""
-    We are looking for a Python Junior Developer experienced with FastAPI, 
-    restAPI, SQL, React, Javascript and habituated with AWS
+    Job DescriptionRole Overview:
+    We are seeking a detail-oriented Junior Backend Engineer to join our engineering team.
+    You will be responsible for building scalable server-side applications, managing complex databases, and integrating cloud services to support high-performance features.
+    This role is ideal for a candidate who has a strong grasp of Data Structures and Algorithms and experience in architecting RESTful APIs.
+    Key Responsibilities:API Development: Architect and maintain robust backends using FastAPI or Node.js to support frontend integrations.
+    System Design: Develop and implement asynchronous task scheduling and message queuing systems using Google Cloud Pub/Sub.  
+    Database Management: Design and optimize normalized schemas in PostgreSQL or MySQL to ensure data integrity and performance.
+    Authentication & Security: Implement secure user authentication workflows using JWT and input validation middleware.  
+    Cloud Integration: Deploy and manage serverless services on Cloud Run and monitor system health through automated tracking.  
+    Collaborative Engineering: Work closely with cross-functional teams to parse complex data and deliver actionable logic, such as automated scoring or matching algorithms.  
+    Qualifications:Currently pursuing or recently completed a B.Tech in Computer Science & Engineering.  
+    Proven proficiency in Python, JavaScript, and TypeScript.  
+    Strong problem-solving skills with a verified track record in Data Structures and Algorithms.  
+    Experience with version control tools like Git and GitHub for collaborative development.  
+    A background in competitive sports or strategic games (like football or chess) is a plus, demonstrating teamwork and strategic thinking.
     """
 
     #Keywords extracted from Job description
-    job_desc_keywords=set(get_keywords(job_description))
+    job_desc_keywords=(get_keywords(job_description))
 
-    matched_skills = job_desc_keywords.intersection(resume_keywords)
-    missing_skills = job_desc_keywords - resume_keywords
-    #match_percentage = (len(matched_skills) / len(job_desc_keywords)) * 100
-
-    # print(f"Match Score: {match_percentage:.2f}%")
-    print(f"Matched: {matched_skills}")
-    print(f"Missing: {missing_skills}")
+    # suggestion=resume_analyzer(resume_keywords,job_desc_keywords)
+    similariity=get_similarity_score(extracted_text,job_desc_keywords)
+    # print (suggestion)
+    print(similariity)
 
 
-
-    # 1. Encode all three high-value sections
-    skills_vec = model.encode(extracted_sections.get('SKILLS', ""))
-
-    e_text = extracted_sections.get('EXPERIENCE', "").strip()
-
-    proj_vec = model.encode(extracted_sections.get('PROJECTS', ""))
-
-
-    jd_vec = model.encode(job_description)
-    
-    w_skills = 0.5  # 50%
-    w_projects = 0.3 # 30%
-    w_experience = 0.2 # 20%
-
-    if not e_text:
-        
-        w_skills = 0.6    # Increase Skills importance
-        w_projects = 0.4  # Increase Projects importance
-        w_experience = 0.0 # Ignore Experience
-        exp_sim = 0.0
-    else:
-        exp_vec = model.encode(e_text)
-        exp_sim = util.cos_sim(exp_vec, jd_vec).item()
-
-# 3. Calculate individual similarities
-    skills_sim = util.cos_sim(skills_vec, jd_vec).item()
-    proj_sim = util.cos_sim(proj_vec, jd_vec).item()
-
-
-# 5. Calculate Final Weighted Score
-    score = (skills_sim * w_skills) + (proj_sim * w_projects) + (exp_sim * w_experience)
-
-    print(f"AI Match Score: {score * 100:.2f}%")
-
-
-
-
-    # print("--- Extracted Keywords ---")
-    # print(resume_keywords)
-    # print("---Extracted Text---")
-    # print(extracted_text)    
+  
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 import re
 from PyPDF2 import PdfReader
 def get_texts():
-    reader = PdfReader("media/RIVO_resume.pdf")
+    reader = PdfReader("media/Subham_Das_Resume.pdf")
     text = ""
     for page in reader.pages:
         extracted = page.extract_text()
