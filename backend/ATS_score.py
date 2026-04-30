@@ -4,7 +4,7 @@ from similarities import get_similarity_score
 
 
 
-def calculate_ats_score(resume_text, jd_text):
+def calculate_ats_score(resume_text, jd_text,job_title_score: int):
 
     # Step 1 — expand both texts (domain aware)
     expanded_resume = expand_keywords(resume_text)
@@ -41,10 +41,11 @@ def calculate_ats_score(resume_text, jd_text):
 
     if similarity_score is not None and analysis is not None:
         final_score = (
-    section_score_avg * 0.30 +
-    similarity_score  * 0.20 +
+    section_score_avg * 0.33 +
+    similarity_score  * 0.15 +
     hard_skill_keyword_score  * 0.40 +
-    soft_skill_keyword_score  *0.10
+    soft_skill_keyword_score  * 0.07 +
+    job_title_score * 0.05
 )
         return {
         "ats_score": round(final_score, 1),

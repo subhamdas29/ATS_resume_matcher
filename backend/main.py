@@ -1,49 +1,81 @@
 from texts import get_texts
-from keywords import get_keywords
+from job_title import get_job_title_score
+from keywords import get_keywords, get_jd_keywords
 from ATS_score import calculate_ats_score
+from fastapi import FastAPI, UploadFile, File, Form
+import os
+from fastapi.middleware.cors import CORSMiddleware
+import shutil
+
+app=FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+@app.get("/")
+def root():
+    return {"message": "The app is running"}
+
+@app.post("/analyze")
+async def resume_analyzer(
+    resume: UploadFile = File(...),
+    job_description: str = Form(...),
+    job_title: str = Form(...)
+):
+    temp_path=f"media/{resume.filename}"
+    with open(temp_path,"wb") as buffer:
+        shutil.copyfileobj(resume.file,buffer) #copyfileobj transfers data from source to detination in small chunks for memory efficiency
 
 
 
-def main():
+    extracted_text=get_texts(temp_path)
+    os.remove(temp_path)
 
+    if not extracted_text:
+        return{"Error": "Could not extract text from PDF. Try another file."}
+
+
+
+    word_count=len(extracted_text.split())
+
+    if word_count>=400 and word_count<=800:
+        wc_msg= "Word count is within the recommended range of 400–800 words — ideal for a professional resume."
+    elif word_count<400:
+        wc_msg= "Your resume is too brief. Add more detail to reach the recommended 400–800 word range."
+    else:
+        wc_msg= "Your resume exceeds the recommended limit. Trim it down to 800 words or fewer for maximum impact."
+
+
+
+
+    resume_keywords=get_keywords(extracted_text,job_title)
+
+    jd_keywords=get_jd_keywords(job_description)
+
+    if resume_keywords is None or jd_keywords is None:
+        return{"Error": "Keyword extraction failed. Try again later."}
     
 
-    #PDF to Text extraction
-    extracted_text=get_texts()
 
-    # word_count = len(extracted_text.split())
-    # print(word_count)
+    job_title_score = get_job_title_score(resume_keywords, job_title)
 
-
-    #Text to Keywords extraction
-    resume_keywords = (get_keywords(extracted_text))
+    if job_title_score==100:
+        jt_msg=f"Your resume aligns with the target role of {job_title}."
+    else:
+        jt_msg=f"Your resume does not appear to target the {job_title} role. Consider tailoring your resume for this position."
 
 
-    job_description="""
-    Job DescriptionRole Overview:
-    We are seeking a detail-oriented Junior Backend Engineer to join our engineering team.
-    You will be responsible for building scalable server-side applications, managing complex databases, and integrating cloud services to support high-performance features.
-    This role is ideal for a candidate who has a strong grasp of Data Structures and Algorithms and experience in architecting RESTful APIs.
-    Key Responsibilities:API Development: Architect and maintain robust backends using FastAPI or Node.js to support frontend integrations.
-    System Design: Develop and implement asynchronous task scheduling and message queuing systems using Google Cloud Pub/Sub.  
-    Database Management: Design and optimize normalized schemas in PostgreSQL or MySQL to ensure data integrity and performance.
-    Authentication & Security: Implement secure user authentication workflows using JWT and input validation middleware.  
-    Cloud Integration: Deploy and manage serverless services on Cloud Run and monitor system health through automated tracking.  
-    Collaborative Engineering: Work closely with cross-functional teams to parse complex data and deliver actionable logic, such as automated scoring or matching algorithms.  
-    Qualifications:Currently pursuing or recently completed a B.Tech in Computer Science & Engineering.  
-    Proven proficiency in Python, JavaScript, and TypeScript.  
-    Strong problem-solving skills with a verified track record in Data Structures and Algorithms.  
-    Experience with version control tools like Git and GitHub for collaborative development.  
-    A background in competitive sports or strategic games (like football or chess) is a plus, demonstrating teamwork and strategic thinking.
-    """
-
-    #Keywords extracted from Job description
-    job_desc_keywords=(get_keywords(job_description))
 
 
-    ats_score=calculate_ats_score(resume_keywords,job_desc_keywords)
-    print(ats_score)
+    ats_score=calculate_ats_score(resume_keywords,jd_keywords,job_title_score)
 
-  
-if __name__ == "__main__":
-    main()
+    if not ats_score:
+        return {"Error": {"Could not generate ATS score. Try again later."}} 
+
+
+
+    return {"word_count":wc_msg, "job_title_match": jt_msg, **ats_score}

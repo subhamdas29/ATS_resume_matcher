@@ -74,7 +74,7 @@ def resume_analyzer(resume_text,jd_text):
     }}
 
     Note: If experience required is not mentioned in the job description or it is mentioned that
-    experience required is '0-1' years: give max score to experience even if experience is not specified in the resume.
+    experience required is '0-1' years: give max score to experience even if experience is not specified in the resume. 
 """
 
     response = client.chat.completions.create(
