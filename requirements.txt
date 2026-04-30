@@ -1,6 +1,0 @@
-fastapi
-uvicorn[standard]
-pydantic
-pyPDF2
-nltk
-sentence_transformers
