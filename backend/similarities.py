@@ -2,7 +2,6 @@ import requests
 import time
 import os
 from dotenv import load_dotenv
-from suggestions import expand_keywords
 
 load_dotenv()
 
@@ -15,14 +14,11 @@ HF_HEADERS = {
 
 def get_similarity_score(resume_text, jd_text):
     
-    expanded_resume = expand_keywords(resume_text)
-
-    expanded_jd = expand_keywords(jd_text)
 
     payload = {
         "inputs": {
-            "source_sentence": expanded_jd,
-            "sentences": [expanded_resume]
+            "source_sentence": resume_text,
+            "sentences": [jd_text]
         }
     }
 

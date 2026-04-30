@@ -1,7 +1,7 @@
 from groq import Groq
 import os
 from dotenv import load_dotenv
-
+import json
 
 load_dotenv()
 client=Groq(api_key=os.getenv("GROQ_API_KEY"))
@@ -44,7 +44,6 @@ def expand_keywords(text):
 def resume_analyzer(resume_text,jd_text):
     prompt=f"""
     You are an expert ATS (Applicant Tracking System) analyzer.
-    
     Analyze the resume against the job description and return ONLY a JSON object.
     
     Resume:
@@ -53,12 +52,15 @@ def resume_analyzer(resume_text,jd_text):
     Job Description:
     {jd_text}
     
-    Return this exact JSON structure:
+    Return this exact JSON structure with exact key name:
     {{
-        "missing_keywords": ["keyword1", "keyword2"],
-        "matched_keywords": ["keyword1", "keyword2"],
+        "hard_skill_missing_keywords": ["python", "c++"],
+        "hard_skill_matched_keywords": ["aws", "mysql"],
+        "soft_skill_missing_keywords": ["strategic problem solving", "collaborative communication"],
+        "soft_skill_matched_keywords": ["integrity", "leadership quality"],
         "section_scores": {{
-            "skills": 85,
+            "hard-skills": 85,
+            "soft-skills": 40,
             "experience": 70,
             "education": 90,
             "summary": 60
@@ -70,11 +72,18 @@ def resume_analyzer(resume_text,jd_text):
         ],
         "overall_feedback": "Your resume lacks key technical skills..."
     }}
-    """
+
+    Note: If experience required is not mentioned in the job description or it is mentioned that
+    experience required is '0-1' years: give max score to experience even if experience is not specified in the resume.
+"""
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",  
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"}  
     )
-    return response.choices[0].message.content
+    content= response.choices[0].message.content
+    if content is None:
+        return None 
+
+    return json.loads(content.strip())

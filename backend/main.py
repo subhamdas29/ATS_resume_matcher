@@ -1,7 +1,6 @@
+from texts import get_texts
 from keywords import get_keywords
-from texts import get_texts, split_into_sections
-from suggestions import resume_analyzer
-from similarities import get_similarity_score
+from ATS_score import calculate_ats_score
 
 
 
@@ -12,12 +11,13 @@ def main():
     #PDF to Text extraction
     extracted_text=get_texts()
 
-    #Extracted texts filled into different sections
-    # extracted_sections=split_into_sections(extracted_text)
+    # word_count = len(extracted_text.split())
+    # print(word_count)
 
 
     #Text to Keywords extraction
     resume_keywords = (get_keywords(extracted_text))
+
 
     job_description="""
     Job DescriptionRole Overview:
@@ -40,11 +40,9 @@ def main():
     #Keywords extracted from Job description
     job_desc_keywords=(get_keywords(job_description))
 
-    # suggestion=resume_analyzer(resume_keywords,job_desc_keywords)
-    similariity=get_similarity_score(extracted_text,job_desc_keywords)
-    # print (suggestion)
-    print(similariity)
 
+    ats_score=calculate_ats_score(resume_keywords,job_desc_keywords)
+    print(ats_score)
 
   
 if __name__ == "__main__":

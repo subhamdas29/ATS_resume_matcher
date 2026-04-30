@@ -1,18 +1,42 @@
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+from groq import Groq
+import os
+from dotenv import load_dotenv
+import json
 
-# Download necessary data (punkt_tab is required in newer NLTK versions)
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('stopwords')
+load_dotenv()
+client=Groq(api_key=os.getenv("GROQ_API_KEY"))
+
 
 def get_keywords(text):
-    #Tokenize (break text into individual words)
-    tokens = word_tokenize(text.lower())
     
-    #Filter out punctuation and stopwords
-    stop_words = set(stopwords.words('english'))
-    keywords = [word for word in tokens if word.isalnum() and word not in stop_words]
+    prompt=f"""
+    Extract keywords from this text and categorize them based on the given format.
+    Return only JSON file, nothing else. No explanations.
+
+    text:{text}
+
+    {{
+        "hard_skills":   ["Python", "Django", "REST API"],
+        "soft_skills":   ["Integrity", "Leadership quality"],
+        "experience":    ["3 years at Google, Paid internship at WIPRO"],
+        "education":     ["B.Tech Computer Science"],
+        "job_titles":    ["Junior Python Developer"],
+        "organizations": ["Google", "TechCorp"],
+        "certifications":["AWS Cloud Practitioner"]
+    }}
+"""
     
-    return keywords
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        response_format={"type": "json_object"},
+        temperature=0.1
+    )
+
+    content = response.choices[0].message.content
+
+    if content is None:
+        return None
+
+    return json.loads(content)
+

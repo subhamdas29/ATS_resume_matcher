@@ -33,3 +33,4 @@ var/
 wheels/
 *.egg-info/
 media/
+test.py
