@@ -59,8 +59,4 @@ def calculate_ats_score(resume_text, jd_text,job_title_score: int):
     }
 
     else:
-        print("Try again later...")
-
-    
-
-    
+        return None

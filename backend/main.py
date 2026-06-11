@@ -74,8 +74,6 @@ async def resume_analyzer(
     ats_score=calculate_ats_score(resume_keywords,jd_keywords,job_title_score)
 
     if not ats_score:
-        return {"Error": {"Could not generate ATS score. Try again later."}} 
-
-
+        return {"Error": "Could not generate ATS score. Try again later."}
 
     return {"word_count":wc_msg, "job_title_match": jt_msg, **ats_score}

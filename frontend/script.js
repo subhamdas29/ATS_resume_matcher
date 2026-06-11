@@ -1,4 +1,14 @@
   const API_BASE = (window.ENV_API_URL || "").replace(/\/$/, "") || "http://localhost:8000";
+  
+  let hasValidResults = false;
+
+  window.addEventListener('error', (event) => {
+    console.error("Error:", event.error);
+  });
+
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error("Unhandled rejection:", event.reason);
+  });
 
   const landingPage = document.getElementById("landingPage");
   const matcherPage = document.getElementById("matcherPage");
@@ -32,6 +42,21 @@
       matcherPage.classList.remove("showing-results");
     }
     if (updateHash && pageHashMap[pageId]) {
+      history.pushState(null, "", `#${pageHashMap[pageId]}`);
+      sessionStorage.setItem("resumePilotPage", pageId);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showPageReplace(pageId, updateHash = true, keepResults = false) {
+    landingPage.style.display = "none";
+    [matcherPage, resultPage, aboutPage, contributorsPage].forEach(page => {
+      page.classList.toggle("visible", page.id === pageId);
+    });
+    if (pageId === "matcherPage" && !keepResults) {
+      matcherPage.classList.remove("showing-results");
+    }
+    if (updateHash && pageHashMap[pageId]) {
       history.replaceState(null, "", `#${pageHashMap[pageId]}`);
       sessionStorage.setItem("resumePilotPage", pageId);
     }
@@ -39,15 +64,36 @@
   }
 
   function restorePageState() {
-    const pageFromHash = hashPageMap[window.location.hash.replace("#", "")];
-    const pageFromSession = sessionStorage.getItem("resumePilotPage");
-    const pageToShow = pageFromHash || pageFromSession;
-    if ([matcherPage.id, resultPage.id, aboutPage.id, contributorsPage.id].includes(pageToShow)) {
+    const hash = window.location.hash.replace("#", "");
+    
+    // If no hash, show landing page and clear results
+    if (!hash) {
+      hasValidResults = false;
+      resultPageContent.innerHTML = "";
+      landingPage.style.display = "block";
+      [matcherPage, resultPage, aboutPage, contributorsPage].forEach(page => {
+        page.classList.toggle("visible", false);
+      });
+      return;
+    }
+    
+    // Otherwise use hash to show the page
+    const pageToShow = hashPageMap[hash];
+    if (pageToShow && [matcherPage.id, resultPage.id, aboutPage.id, contributorsPage.id].includes(pageToShow)) {
+      // Don't show results if accessed via history without fresh data
+      if (pageToShow === "resultPage" && !hasValidResults) {
+        hasValidResults = false;
+        resultPageContent.innerHTML = "";
+        return;
+      }
       showPage(pageToShow, false);
     }
   }
 
   restorePageState();
+
+  window.addEventListener('popstate', restorePageState);
+  window.addEventListener('hashchange', restorePageState);
 
   openMatcherBtn.addEventListener("click", () => {
     showPage("matcherPage");
@@ -80,11 +126,11 @@
   });
 
   async function analyze(event) {
-    event?.preventDefault();
-    event?.stopPropagation();
-    sessionStorage.setItem("resumePilotPage", "matcherPage");
-    history.replaceState(null, "", "#matcher");
-    matcherPage.classList.remove("showing-results");
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.returnValue = false;
+    }
 
     const btn   = document.getElementById("analyzeBtn");
     const errEl = document.getElementById("errorMsg");
@@ -167,14 +213,15 @@
 
   function openResultPage(html) {
     resultPageContent.innerHTML = html;
-    showPage("resultPage", true, true);
+    showPageReplace("resultPage", true, true);
   }
 
   function renderResults(d) {
+    hasValidResults = true;
     const resultsEl = document.getElementById("results");
     resultPageContent.innerHTML = "";
     resultPageContent.appendChild(resultsEl);
-    showPage("resultPage", true, true);
+    showPageReplace("resultPage", true, true);
     resultsEl.classList.add("visible");
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
