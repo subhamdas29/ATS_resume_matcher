@@ -8,7 +8,6 @@ from fastapi import FastAPI, UploadFile, File, Form
 import os
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
-from links import get_links
 
 app=FastAPI()
 
@@ -34,11 +33,8 @@ async def resume_analyzer(
         content = await resume.read()
         await buffer.write(content)
 
-    # PDF to text
-    extracted_text= await asyncio.to_thread(get_texts, temp_path)
-
-    # detect any links in resume
-    detected_links= await asyncio.to_thread(get_links, temp_path, extracted_text)
+    # PDF to text and also detect github link
+    extracted_text, github_username = await asyncio.to_thread(get_texts, temp_path)
 
     # remove the resume from the storage because the content is already extracted, we don't need it anymore
     os.remove(temp_path)
@@ -79,7 +75,7 @@ async def resume_analyzer(
 
 
 
-    ats_score=await calculate_ats_score(resume_keywords,jd_keywords, job_title_score, detected_links)
+    ats_score=await calculate_ats_score(resume_keywords,jd_keywords, job_title_score, github_username)
 
     if not ats_score:
         return {"Error": "Could not generate ATS score. Try again later."}

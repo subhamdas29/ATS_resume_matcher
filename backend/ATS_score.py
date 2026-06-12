@@ -1,22 +1,27 @@
 from suggestions import resume_analyzer,expand_keywords
 from similarities import get_similarity_score
 import asyncio
+from github_score import get_github_score
 
 
+async def calculate_ats_score(resume_text, jd_text,job_title_score: int, link):
 
-async def calculate_ats_score(resume_text, jd_text,job_title_score: int, links):
-
-    # Step 1 — expand both texts (domain aware)
+    # expand both texts (domain aware)
     expanded_resume, expanded_jd = await asyncio.gather(
         expand_keywords(resume_text),
         expand_keywords(jd_text)
     )
 
-    # Step 2 — semantic similarity on expanded text
+    # semantic similarity on expanded text
     similarity_score = await get_similarity_score(expanded_resume, expanded_jd)
     
+    # get a github score based on the user github profile
+    if link:
+        git_score, gh_msg = await get_github_score(link)
+    else:
+        git_score, gh_msg = 0, "No GitHub link provided(Adding a GitHub profile link will highly improve your ATS score)."
 
-    # Step 3 — Groq full analysis
+    # full analysis
     analysis = await resume_analyzer(resume_text, jd_text)
 
     if analysis is None:
@@ -43,11 +48,12 @@ async def calculate_ats_score(resume_text, jd_text,job_title_score: int, links):
 
     if similarity_score is not None and analysis is not None:
         final_score = (
-    section_score_avg * 0.33 +
-    similarity_score  * 0.15 +
-    hard_skill_keyword_score  * 0.40 +
-    soft_skill_keyword_score  * 0.07 +
-    job_title_score * 0.05
+    section_score_avg           *0.28 +
+    similarity_score            *0.15 +
+    hard_skill_keyword_score    *0.35 +
+    soft_skill_keyword_score    *0.07 +
+    job_title_score             *0.05 +
+    git_score                   *0.10
 )
         return {
         "ats_score": round(final_score, 1),
@@ -57,7 +63,8 @@ async def calculate_ats_score(resume_text, jd_text,job_title_score: int, links):
         "soft_skills_missing": analysis.get("soft_skill_missing_keywords", []),
         "weak_sections": analysis.get("weak_sections", []),
         "suggestions": analysis.get("suggestions", []),
-        "feedback": analysis.get("overall_feedback", [])
+        "feedback": analysis.get("overall_feedback", []),
+        "github": gh_msg
     }
 
     else:
