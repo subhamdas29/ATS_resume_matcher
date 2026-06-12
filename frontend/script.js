@@ -258,12 +258,16 @@
 
     const wcCard  = document.getElementById("wordCountCard");
     const jtCard  = document.getElementById("jobTitleCard");
+    const ghCard  = document.getElementById("githubCard");
     const wcText  = document.getElementById("wordCountText");
     const jtText  = document.getElementById("jobTitleText");
+    const ghText  = document.getElementById("githubText");
     wcText.textContent = d.word_count || "-";
     jtText.textContent = d.job_title_match || "-";
+    ghText.textContent = d.github || "-";
     wcCard.className = "info-card " + (d.word_count?.includes("within") ? "ok" : "warn");
     jtCard.className = "info-card " + (d.job_title_match?.includes("aligns") ? "ok" : "warn");
+    ghCard.className = "info-card " + (d.github?.includes("No GitHub") ? "warn" : "ok");
 
     document.getElementById("feedbackText").textContent = d.feedback || "-";
 
