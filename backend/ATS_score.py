@@ -1,24 +1,26 @@
 from suggestions import resume_analyzer,expand_keywords
 from similarities import get_similarity_score
+import asyncio
 
 
 
-
-def calculate_ats_score(resume_text, jd_text,job_title_score: int):
+async def calculate_ats_score(resume_text, jd_text,job_title_score: int, links):
 
     # Step 1 — expand both texts (domain aware)
-    expanded_resume = expand_keywords(resume_text)
-    expanded_jd     = expand_keywords(jd_text)
+    expanded_resume, expanded_jd = await asyncio.gather(
+        expand_keywords(resume_text),
+        expand_keywords(jd_text)
+    )
 
     # Step 2 — semantic similarity on expanded text
-    similarity_score = get_similarity_score(expanded_resume, expanded_jd)
+    similarity_score = await get_similarity_score(expanded_resume, expanded_jd)
     
 
     # Step 3 — Groq full analysis
-    analysis = resume_analyzer(resume_text, jd_text)
+    analysis = await resume_analyzer(resume_text, jd_text)
 
     if analysis is None:
-        print("Resume analysis failed")
+        return None
     else:
         hard_skill_matched_keywords = analysis.get("hard_skill_matched_keywords", [])
         hard_skill_missing_keywords = analysis.get("hard_skill_missing_keywords", [])

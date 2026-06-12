@@ -1,12 +1,12 @@
-from groq import Groq
+from groq import AsyncGroq
 import os
 from dotenv import load_dotenv
 import json
 
 load_dotenv()
-client=Groq(api_key=os.getenv("GROQ_API_KEY"))
+client=AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
 
-def get_jd_keywords(text):
+async def get_jd_keywords(text):
     
     prompt=f"""
     Extract keywords from this text and categorize them based on the given format.
@@ -24,7 +24,7 @@ def get_jd_keywords(text):
     }}
 """
     
-    response = client.chat.completions.create(
+    response = await client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"},
@@ -40,7 +40,7 @@ def get_jd_keywords(text):
 
 
 
-def get_keywords(text,job_title):
+async def get_keywords(text,job_title):
     
     prompt=f"""
     Extract keywords from this text and categorize them based on the given format and exact key names.
@@ -62,7 +62,7 @@ def get_keywords(text,job_title):
     }}
 """
     
-    response = client.chat.completions.create(
+    response = await client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"},

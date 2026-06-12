@@ -1,12 +1,12 @@
-from groq import Groq
+from groq import AsyncGroq
 import os
 from dotenv import load_dotenv
 import json
 
 load_dotenv()
-client=Groq(api_key=os.getenv("GROQ_API_KEY"))
+client=AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
 
-def expand_keywords(text):
+async def expand_keywords(text):
     prompt=f"""
     You are a tech skill mapper.
     
@@ -26,7 +26,7 @@ def expand_keywords(text):
     
     Text to expand: {text}
     """
-    response=client.chat.completions.create(
+    response=await client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.1
@@ -41,7 +41,7 @@ def expand_keywords(text):
 
 
 
-def resume_analyzer(resume_text,jd_text):
+async def resume_analyzer(resume_text,jd_text):
     prompt=f"""
     You are an expert ATS (Applicant Tracking System) analyzer.
     Analyze the resume against the job description and return ONLY a JSON object.
@@ -77,7 +77,7 @@ def resume_analyzer(resume_text,jd_text):
     experience required is '0-1' years: give max score to experience even if experience is not specified in the resume. 
 """
 
-    response = client.chat.completions.create(
+    response = await client.chat.completions.create(
         model="llama-3.3-70b-versatile",  
         messages=[{"role": "user", "content": prompt}],
         response_format={"type": "json_object"}  

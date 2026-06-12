@@ -1,6 +1,6 @@
-import requests
-import time
 import os
+import asyncio  # for asyncio.sleep
+import httpx    # swap requests for httpx
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,9 +12,7 @@ HF_HEADERS = {
 }
 
 
-def get_similarity_score(resume_text, jd_text):
-    
-
+async def get_similarity_score(resume_text, jd_text):
     payload = {
         "inputs": {
             "source_sentence": resume_text,
@@ -22,19 +20,21 @@ def get_similarity_score(resume_text, jd_text):
         }
     }
 
-    for attempt in range(5):
-        res = requests.post(API_URL, headers=HF_HEADERS, json=payload)
+    # Use httpx.AsyncClient() instead of requests
+    async with httpx.AsyncClient() as client:
+        for attempt in range(5):
+            res = await client.post(API_URL, headers=HF_HEADERS, json=payload)
 
-        if res.status_code == 200:
-            score = res.json()[0]
-            return round(float(score) * 100, 2)
+            if res.status_code == 200:
+                score = res.json()[0]
+                return round(float(score) * 100, 2)
 
-        elif res.status_code == 503:
-            print(f"Model loading... retrying ({attempt+1}/5)")
-            time.sleep(20)
+            elif res.status_code == 503:
+                print(f"Model loading... retrying ({attempt+1}/5)")
+                await asyncio.sleep(20)
 
-        else:
-            print(f"Error {res.status_code}: {res.text}")
-            return None
+            else:
+                print(f"Error {res.status_code}: {res.text}")
+                return None
 
     return None
