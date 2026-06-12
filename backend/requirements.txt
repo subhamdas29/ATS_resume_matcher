@@ -5,3 +5,4 @@ pyPDF2
 groq
 requests
 python-multipart
+aiofiles

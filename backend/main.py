@@ -1,4 +1,6 @@
 from texts import get_texts
+import asyncio
+import aiofiles
 from job_title import get_job_title_score
 from keywords import get_keywords, get_jd_keywords
 from ATS_score import calculate_ats_score
@@ -6,6 +8,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 import os
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
+from links import get_links
 
 app=FastAPI()
 
@@ -27,12 +30,17 @@ async def resume_analyzer(
     job_title: str = Form(...)
 ):
     temp_path=f"media/{resume.filename}"
-    with open(temp_path,"wb") as buffer:
-        shutil.copyfileobj(resume.file,buffer) #copyfileobj transfers data from source to detination in small chunks for memory efficiency
+    async with aiofiles.open(temp_path, "wb") as buffer:
+        content = await resume.read()
+        await buffer.write(content)
 
+    # PDF to text
+    extracted_text= await asyncio.to_thread(get_texts, temp_path)
 
+    # detect any links in resume
+    detected_links= await asyncio.to_thread(get_links, temp_path, extracted_text)
 
-    extracted_text=get_texts(temp_path)
+    # remove the resume from the storage because the content is already extracted, we don't need it anymore
     os.remove(temp_path)
 
     if not extracted_text:
@@ -51,10 +59,10 @@ async def resume_analyzer(
 
 
 
+    resume_keywords, jd_keywords = await asyncio.gather(
+        get_keywords(extracted_text,job_title),
+        get_jd_keywords(job_description))
 
-    resume_keywords=get_keywords(extracted_text,job_title)
-
-    jd_keywords=get_jd_keywords(job_description)
 
     if resume_keywords is None or jd_keywords is None:
         return{"Error": "Keyword extraction failed. Try again later."}
@@ -71,7 +79,7 @@ async def resume_analyzer(
 
 
 
-    ats_score=calculate_ats_score(resume_keywords,jd_keywords,job_title_score)
+    ats_score=await calculate_ats_score(resume_keywords,jd_keywords, job_title_score, detected_links)
 
     if not ats_score:
         return {"Error": "Could not generate ATS score. Try again later."}
