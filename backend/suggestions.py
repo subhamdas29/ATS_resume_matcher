@@ -73,7 +73,7 @@ async def resume_analyzer(resume_text,jd_text):
         "overall_feedback": "Your resume lacks key technical skills..."
     }}
 
-    Note: If experience required is not mentioned in the job description or it is mentioned that
+    Note: If experience required is not mentioned in the job description or it is mentioned that 
     experience required is '0-1' years: give max score to experience even if experience is not specified in the resume. 
 """
 
