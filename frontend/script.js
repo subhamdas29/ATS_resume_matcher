@@ -1,4 +1,4 @@
-  const API_BASE = (window.ENV_API_URL || "").replace(/\/$/, "") || "atsresumematcher-production.up.railway.app";
+  const API_BASE = (window.ENV_API_URL || "").replace(/\/$/, "") || "https://atsresumematcher-production.up.railway.app";
   
   let hasValidResults = false;
 
