@@ -12,10 +12,6 @@ venv/
 env/
 .env
 
-# Database
-# If using SQLite, ignore the actual DB file so you don't overwrite each other's data
-*.db
-*.sqlite3
 
 # Distribution / packaging
 .Python
@@ -32,5 +28,5 @@ sdist/
 var/
 wheels/
 *.egg-info/
-media/
+
 test.py
