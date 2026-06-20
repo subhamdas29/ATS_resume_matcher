@@ -1,10 +1,25 @@
-from suggestions import resume_analyzer,expand_keywords
+from suggestions import resume_analyzer, expand_keywords
 from similarities import get_similarity_score
 import asyncio
 from github_score import get_github_score
 
 
-async def calculate_ats_score(resume_text, jd_text,job_title_score: int, link):
+def _flatten_keywords(keywords: dict) -> str:
+    """Converts a keyword dict (from keywords.py) into clean, comma-separated
+    text -- no Python dict syntax, brackets, or key names."""
+    parts = []
+    for value in keywords.values():
+        if isinstance(value, list):
+            parts.extend(str(v) for v in value if v)
+        elif value:
+            parts.append(str(value))
+    return ", ".join(parts)
+
+
+async def calculate_ats_score(resume_keywords, jd_keywords, job_title_score: int, link):
+
+    resume_text = _flatten_keywords(resume_keywords)
+    jd_text = _flatten_keywords(jd_keywords)
 
     # expand both texts (domain aware)
     expanded_resume, expanded_jd = await asyncio.gather(
@@ -14,8 +29,7 @@ async def calculate_ats_score(resume_text, jd_text,job_title_score: int, link):
 
     # semantic similarity on expanded text
     similarity_score = await get_similarity_score(expanded_resume, expanded_jd)
-    
-    # get a github score based on the user github profile
+
     if link:
         git_score, gh_msg = await get_github_score(link)
     else:
@@ -23,6 +37,8 @@ async def calculate_ats_score(resume_text, jd_text,job_title_score: int, link):
 
     # full analysis
     analysis = await resume_analyzer(resume_text, jd_text)
+
+    # ... rest of the function is unchanged from here down
 
     if analysis is None:
         return None
