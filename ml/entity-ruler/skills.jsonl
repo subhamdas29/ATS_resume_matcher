@@ -1,0 +1,379 @@
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "python"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "javascript"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "typescript"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "java"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "c++"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "c#"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "go"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "golang"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "rust"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ruby"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "php"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "swift"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "kotlin"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "scala"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "r"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "matlab"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "bash"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "shell"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "powershell"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "html"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "css"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sass"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "scss"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sql"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nosql"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "fastapi"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "django"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "flask"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "express"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "expressjs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "express.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nestjs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nest.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "spring"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "spring"}, {"LOWER": "boot"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "laravel"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "rails"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ruby"}, {"LOWER": "on"}, {"LOWER": "rails"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "react"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "reactjs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "react.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "react"}, {"LOWER": "native"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "next.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nextjs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vue"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vue.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vuejs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "angular"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "angularjs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "svelte"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nuxt"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nuxt.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "redux"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "zustand"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "graphql"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "rest"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "restful"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "grpc"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "websocket"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "socket.io"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "node.js"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nodejs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "deno"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "bun"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "postgresql"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "postgres"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mysql"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sqlite"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mongodb"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "redis"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cassandra"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "dynamodb"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "elasticsearch"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "neo4j"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "supabase"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "firebase"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "firestore"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "influxdb"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mariadb"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "oracle"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "prisma"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sqlalchemy"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sequelize"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "typeorm"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mongoose"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "hibernate"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "docker"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "kubernetes"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "k8s"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "k3s"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "helm"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "terraform"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ansible"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "jenkins"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "github"}, {"LOWER": "actions"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "gitlab"}, {"LOWER": "ci"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "gitlab"}, {"LOWER": "ci"}, {"LOWER": "/cd"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "circleci"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "travisci"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "argocd"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "prometheus"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "grafana"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nginx"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "apache"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "aws"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "gcp"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "azure"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ec2"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "s3"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "lambda"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cloudfront"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "rds"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "eks"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ecs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sqs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sns"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cloudwatch"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vercel"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "netlify"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "railway"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "heroku"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "digitalocean"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "kafka"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "rabbitmq"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "celery"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "airflow"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "apache"}, {"LOWER": "kafka"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "apache"}, {"LOWER": "spark"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "apache"}, {"LOWER": "flink"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "spark"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "hadoop"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "hive"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "numpy"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "pandas"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "matplotlib"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "seaborn"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "scikit-learn"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "sklearn"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "tensorflow"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "keras"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "pytorch"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "huggingface"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "transformers"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "langchain"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "openai"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "llm"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "rag"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "spacy"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nltk"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "opencv"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "xgboost"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "lightgbm"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "catboost"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mlflow"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "wandb"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "git"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "github"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "gitlab"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "bitbucket"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "linux"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "unix"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ubuntu"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "jwt"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "oauth"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "oauth2"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ssl"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "tls"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ci"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cd"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ci/cd"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "devops"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mlops"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "devsecops"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "microservices"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "monolith"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "serverless"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "event-driven"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "saga"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cqrs"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "solid"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "dry"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "tdd"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "bdd"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "unit"}, {"LOWER": "testing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "integration"}, {"LOWER": "testing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "end-to-end"}, {"LOWER": "testing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "pytest"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "jest"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mocha"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cypress"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "selenium"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "postman"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "swagger"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "openapi"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "tailwind"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "tailwindcss"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "bootstrap"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "material"}, {"LOWER": "ui"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "mui"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "shadcn"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "figma"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "photoshop"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "illustrator"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "excel"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "tableau"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "power"}, {"LOWER": "bi"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "powerbi"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "looker"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "data"}, {"LOWER": "analysis"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "data"}, {"LOWER": "engineering"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "data"}, {"LOWER": "science"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "machine"}, {"LOWER": "learning"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "deep"}, {"LOWER": "learning"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "natural"}, {"LOWER": "language"}, {"LOWER": "processing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "nlp"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "computer"}, {"LOWER": "vision"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "reinforcement"}, {"LOWER": "learning"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "generative"}, {"LOWER": "ai"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "gen"}, {"LOWER": "ai"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "prompt"}, {"LOWER": "engineering"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "fine-tuning"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "fine"}, {"LOWER": "tuning"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "embeddings"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vector"}, {"LOWER": "database"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "pinecone"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "weaviate"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "chroma"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "system"}, {"LOWER": "design"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "api"}, {"LOWER": "design"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "database"}, {"LOWER": "design"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "object-oriented"}, {"LOWER": "programming"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "oop"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "functional"}, {"LOWER": "programming"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "concurrent"}, {"LOWER": "programming"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "async"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "asyncio"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "multithreading"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "multiprocessing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "load"}, {"LOWER": "balancing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "caching"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cdn"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "data"}, {"LOWER": "structures"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "algorithms"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "dynamic"}, {"LOWER": "programming"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "graph"}, {"LOWER": "algorithms"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "linux"}, {"LOWER": "administration"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "network"}, {"LOWER": "security"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "cryptography"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "penetration"}, {"LOWER": "testing"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vulnerability"}, {"LOWER": "assessment"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "jira"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "confluence"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "trello"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "notion"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "slack"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vs"}, {"LOWER": "code"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "intellij"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "pycharm"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "vim"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "neovim"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "android"}, {"LOWER": "development"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "ios"}, {"LOWER": "development"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "flutter"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "dart"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "expo"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "unity"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "unreal"}, {"LOWER": "engine"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "blockchain"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "solidity"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "web3"}]}
+{"label": "HARD_SKILL", "pattern": [{"LOWER": "smart"}, {"LOWER": "contracts"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "aws"}, {"LOWER": "certified"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "google"}, {"LOWER": "cloud"}, {"LOWER": "certified"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "azure"}, {"LOWER": "certified"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "cka"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "ckad"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "pmp"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "comptia"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "cissp"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "ccna"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "tensorflow"}, {"LOWER": "developer"}, {"LOWER": "certificate"}]}
+{"label": "CERTIFICATION", "pattern": [{"LOWER": "oracle"}, {"LOWER": "certified"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "communication"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "teamwork"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "leadership"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "problem"}, {"LOWER": "solving"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "problem-solving"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "critical"}, {"LOWER": "thinking"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "time"}, {"LOWER": "management"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "collaboration"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "adaptability"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "attention"}, {"LOWER": "to"}, {"LOWER": "detail"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "creativity"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "mentoring"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "mentorship"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "presentation"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "public"}, {"LOWER": "speaking"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "project"}, {"LOWER": "management"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "agile"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "scrum"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "kanban"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "stakeholder"}, {"LOWER": "management"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "cross-functional"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "analytical"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "self-motivated"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "fast"}, {"LOWER": "learner"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "quick"}, {"LOWER": "learner"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "documentation"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "technical"}, {"LOWER": "writing"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "research"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "negotiation"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "conflict"}, {"LOWER": "resolution"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "empathy"}]}
+{"label": "SOFT_SKILL", "pattern": [{"LOWER": "emotional"}, {"LOWER": "intelligence"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "software"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "software"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "backend"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "backend"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "frontend"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "frontend"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "full"}, {"LOWER": "stack"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "fullstack"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "full-stack"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "full"}, {"LOWER": "stack"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "data"}, {"LOWER": "scientist"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "data"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "data"}, {"LOWER": "analyst"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "ml"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "machine"}, {"LOWER": "learning"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "ai"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "devops"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "cloud"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "cloud"}, {"LOWER": "architect"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "solutions"}, {"LOWER": "architect"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "site"}, {"LOWER": "reliability"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "sre"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "security"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "mobile"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "android"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "ios"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "product"}, {"LOWER": "manager"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "technical"}, {"LOWER": "lead"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "tech"}, {"LOWER": "lead"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "engineering"}, {"LOWER": "manager"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "cto"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "intern"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "software"}, {"LOWER": "intern"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "research"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "ui"}, {"LOWER": "developer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "ux"}, {"LOWER": "designer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "ui/ux"}, {"LOWER": "designer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "database"}, {"LOWER": "administrator"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "dba"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "qa"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "test"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "embedded"}, {"LOWER": "engineer"}]}
+{"label": "JOB_TITLE", "pattern": [{"LOWER": "systems"}, {"LOWER": "programmer"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "b.tech"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "b.e"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "bachelor"}, {"LOWER": "of"}, {"LOWER": "technology"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "bachelor"}, {"LOWER": "of"}, {"LOWER": "engineering"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "bachelor"}, {"LOWER": "of"}, {"LOWER": "science"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "b.sc"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "bsc"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "m.tech"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "m.e"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "master"}, {"LOWER": "of"}, {"LOWER": "technology"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "master"}, {"LOWER": "of"}, {"LOWER": "science"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "m.sc"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "msc"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "mba"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "phd"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "ph.d"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "computer"}, {"LOWER": "science"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "computer"}, {"LOWER": "science"}, {"LOWER": "&"}, {"LOWER": "engineering"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "information"}, {"LOWER": "technology"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "electronics"}, {"LOWER": "&"}, {"LOWER": "communication"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "electrical"}, {"LOWER": "engineering"}]}
+{"label": "EDUCATION", "pattern": [{"LOWER": "mechanical"}, {"LOWER": "engineering"}]}
