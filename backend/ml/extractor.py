@@ -17,7 +17,7 @@ from spacy.pipeline import EntityRuler
 # ── paths ────────────────────────────────────────────────────────────────────
 _BASE = pathlib.Path(__file__).parent          # ml/
 _RULER_PATTERNS = _BASE / "entity_ruler" / "skills.jsonl"
-_NER_MODEL_PATH = _BASE / "ner_model"          # will exist after training
+_NER_MODEL_PATH = _BASE / "ner_model" / "model-best"  # saved by train.py
 
 # ── label → output-key mapping ───────────────────────────────────────────────
 _LABEL_TO_KEY = {
