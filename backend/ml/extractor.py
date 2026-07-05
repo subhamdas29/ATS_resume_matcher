@@ -32,42 +32,26 @@ _LABEL_TO_KEY = {
 
 # ── model is loaded ONCE at import time, not on every request ─────────────────
 def _build_pipeline() -> spacy.Language:
-    """
-    Build the spaCy pipeline:
-      1. Load base model (for tokenization + sentence splitting).
-      2. Add EntityRuler with our skills dictionary.
-      3. If a trained NER model exists, add it as a second pass.
-
-    Returns a ready-to-use nlp pipeline.
-    """
-    # Step 1 — base model (tokenizer + tagger, no NER yet)
-    nlp = spacy.load("en_core_web_sm", exclude=["ner"])
-
-    # Step 2 — Entity Ruler (dictionary-based, fast)
-    ruler = nlp.add_pipe("entity_ruler", config={"overwrite_ents": False})
-    patterns = []
-    with open(_RULER_PATTERNS, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                patterns.append(json.loads(line))
-    ruler.add_patterns(patterns)
-    print(f"[extractor] Entity Ruler loaded: {len(patterns)} patterns")
-
-    # Step 3 — Custom NER model (plugged in later — nothing to change here)
+    # Load the trained NER model as the base (it already has tok2vec + ner)
     if _NER_MODEL_PATH.exists():
-        # Load the trained NER component and add it after the ruler
-        ner_nlp = spacy.load(_NER_MODEL_PATH)
-        if "ner" in ner_nlp.pipe_names:
-            nlp.add_pipe(
-                "ner",
-                source=ner_nlp,
-                name="custom_ner",
-                after="entity_ruler",
-            )
-            print("[extractor] Custom NER model loaded and added to pipeline")
+        nlp = spacy.load(_NER_MODEL_PATH)
+        print("[extractor] Custom NER model loaded as base pipeline")
     else:
-        print("[extractor] No trained NER model found — using Entity Ruler only")
+        nlp = spacy.load("en_core_web_lg", exclude=["ner"])
+        print("[extractor] No trained NER model found — using en_core_web_lg only")
+
+    # Add Entity Ruler BEFORE the NER so it runs first
+    # (overwrite_ents=False means ruler results are protected from NER overwriting)
+    if "entity_ruler" not in nlp.pipe_names:
+        ruler = nlp.add_pipe("entity_ruler", before="ner", config={"overwrite_ents": False})
+        patterns = []
+        with open(_RULER_PATTERNS, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    patterns.append(json.loads(line))
+        ruler.add_patterns(patterns)
+        print(f"[extractor] Entity Ruler loaded: {len(patterns)} patterns")
 
     return nlp
 

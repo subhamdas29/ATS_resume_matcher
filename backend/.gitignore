@@ -30,3 +30,10 @@ wheels/
 *.egg-info/
 
 test.py
+
+# Ignore spaCy training output binaries
+backend/ml/ner_model/model-best/
+backend/ml/ner_model/model-last/
+
+# Ignore raw binary data sets
+backend/ml/training/data/*.spacy

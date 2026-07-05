@@ -16,7 +16,6 @@ LABEL_MAP = {
     "College Name":         "ORGANIZATION",
     "Companies worked at":  "ORGANIZATION",
     "Degree":               "EDUCATION",
-    "Years of Experience":  "EXPERIENCE",
 }
 
 def load_raw(path):

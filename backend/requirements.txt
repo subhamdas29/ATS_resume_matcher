@@ -1,11 +1,24 @@
-fastapi
-uvicorn[standard]
-pydantic
-pyPDF2
-groq
-requests
-python-multipart
-aiofiles
+# ── Web Framework ─────────────────────────────────────────────────────────────
+fastapi==0.115.12
+uvicorn==0.34.3
+python-multipart==0.0.20
+
+# ── PDF Parsing ───────────────────────────────────────────────────────────────
+PyPDF2==3.0.1
+
+# ── HTTP Client (HuggingFace similarity + GitHub API) ─────────────────────────
+httpx==0.28.1
+
+# ── LLM (Groq — still used for analysis/feedback in suggestions.py) ───────────
+groq==0.25.0
+
+# ── NLP — spaCy pipeline (Entity Ruler + custom NER) ─────────────────────────
 spacy==3.7.4
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.7.1/en_core_web_lg-3.7.1-py3-none-any.whl
+
+# ── Database (Supabase / PostgreSQL) ──────────────────────────────────────────
+supabase==2.15.1
+psycopg2-binary==2.9.10
+
+# ── Environment variables ─────────────────────────────────────────────────────
+python-dotenv==1.1.0
