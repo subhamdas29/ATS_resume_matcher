@@ -1,83 +1,77 @@
-from texts import get_texts
-import asyncio
-import aiofiles
-from job_title import get_job_title_score
-from keywords import get_keywords, get_jd_keywords
-from ATS_score import calculate_ats_score
-from fastapi import FastAPI, UploadFile, File, Form
-import os
-from fastapi.middleware.cors import CORSMiddleware
-import shutil
+"""
+main.py — ADDITIONS ONLY
+========================
+This file shows ONLY what to add to your existing main.py.
+Do not replace your existing file — integrate these changes into it.
 
-app=FastAPI()
+SECTION 1: Add these imports at the top alongside your existing ones
+SECTION 2: Update the /analyze endpoint signature
+SECTION 3: Add two new endpoints after /analyze
+"""
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# SECTION 1 — ADD THESE IMPORTS at the top of your existing main.py
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-@app.get("/")
-def root():
-    return {"message": "The app is running"}
+from fastapi import Depends
+from auth import get_current_user
+from db.crud import save_analysis, get_user_analyses, get_single_analysis
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# SECTION 2 — UPDATE YOUR EXISTING /analyze ENDPOINT
+#
+# Your current signature probably looks like:
+#
+#   @app.post("/analyze")
+#   async def analyze_resume(
+#       resume: UploadFile = File(...),
+#       job_description: str = Form(...),
+#       job_title: str = Form(...),
+#   ):
+#
+# Change it to add `user_id: str = Depends(get_current_user)`:
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 @app.post("/analyze")
-async def resume_analyzer(
+async def analyze_resume(
     resume: UploadFile = File(...),
     job_description: str = Form(...),
-    job_title: str = Form(...)
+    job_title: str = Form(...),
+    user_id: str = Depends(get_current_user),   # ← ADD THIS LINE
 ):
-    temp_path=f"media/{resume.filename}"
-    async with aiofiles.open(temp_path, "wb") as buffer:
-        content = await resume.read()
-        await buffer.write(content)
+    # ... your existing pipeline code stays exactly as-is ...
 
-    # PDF to text and also detect github link
-    extracted_text, github_username = await asyncio.to_thread(get_texts, temp_path)
-
-    # remove the resume from the storage because the content is already extracted, we don't need it anymore
-    os.remove(temp_path)
-
-    if not extracted_text:
-        return{"Error": "Could not extract text from PDF. Try another file."}
+    # ADD these two lines right before your final `return result`:
+    save_analysis(result, job_title, user_id)
+    return result
 
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# SECTION 3 — ADD THESE TWO NEW ENDPOINTS after your /analyze endpoint
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    word_count=len(extracted_text.split())
-
-    if word_count>=400 and word_count<=800:
-        wc_msg= "Word count is within the recommended range of 400–800 words — ideal for a professional resume."
-    elif word_count<400:
-        wc_msg= "Your resume is too brief. Add more detail to reach the recommended 400–800 word range."
-    else:
-        wc_msg= "Your resume exceeds the recommended limit. Trim it down to 800 words or fewer for maximum impact."
-
-
-
-    resume_keywords, jd_keywords = await asyncio.gather(
-        get_keywords(extracted_text,job_title),
-        get_jd_keywords(job_description))
+@app.get("/history")
+async def get_history(user_id: str = Depends(get_current_user)):
+    """
+    Returns all past scorecards for the authenticated user, newest first.
+    Frontend calls this to render the history/dashboard page.
+    """
+    analyses = get_user_analyses(user_id)
+    return {"analyses": analyses}
 
 
-    if resume_keywords is None or jd_keywords is None:
-        return{"Error": "Keyword extraction failed. Try again later."}
-    
-
-
-    job_title_score = get_job_title_score(resume_keywords, job_title)
-
-    if job_title_score==100:
-        jt_msg=f"Your resume aligns with the target role of {job_title}."
-    else:
-        jt_msg=f"Your resume does not appear to target the {job_title} role. Consider tailoring your resume for this position."
-
-
-
-
-    ats_score=await calculate_ats_score(resume_keywords,jd_keywords, job_title_score, github_username)
-
-    if not ats_score:
-        return {"Error": "Could not generate ATS score. Try again later."}
-
-    return {"word_count":wc_msg, "job_title_match": jt_msg, **ats_score}
+@app.get("/history/{analysis_id}")
+async def get_scorecard(
+    analysis_id: str,
+    user_id: str = Depends(get_current_user),
+):
+    """
+    Returns one specific scorecard.
+    Frontend calls this when the user clicks on a past result.
+    """
+    scorecard = get_single_analysis(analysis_id, user_id)
+    if not scorecard:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Scorecard not found")
+    return scorecard
