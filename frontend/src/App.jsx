@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "./lib/supabaseClient";
 
 const API_BASE = (
   (window.ENV_API_URL || import.meta.env.VITE_API_URL || "").replace(/\/$/, "")
 ) || "https://atsresumematcher-production.up.railway.app";
 
-// ── FIX 1: added "historyPage" to both maps ────────────────────────────────
+// â”€â”€ FIX 1: added "historyPage" to both maps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const pageHashMap = {
   matcherPage:      "matcher",
   resultPage:       "results",
@@ -13,7 +13,7 @@ const pageHashMap = {
   contributorsPage: "contributors",
   loginPage:        "login",
   signupPage:       "signup",
-  historyPage:      "history",   // ← NEW
+  historyPage:      "history",   // â† NEW
 };
 
 const hashPageMap = {
@@ -23,17 +23,24 @@ const hashPageMap = {
   contributors: "contributorsPage",
   login:        "loginPage",
   signup:       "signupPage",
-  history:      "historyPage",   // ← NEW
+  history:      "historyPage",   // â† NEW
 };
 
-function pageFromHash(hasResults) {
+function pageFromHash(hasResults, session = null, authReady = true) {
   const hash = window.location.hash.replace("#", "");
   if (!hash) return "landingPage";
-  const page = hashPageMap[hash];
+  const page = hashPageMap[hash] || "landingPage";
+  if (!authReady) return page;
+  if (!session && isProtectedPage(page)) return "loginPage";
   if (page === "resultPage" && !hasResults) return "matcherPage";
-  return page || "landingPage";
+  return page;
 }
 
+const PUBLIC_PAGES = new Set(["landingPage", "loginPage", "signupPage"]);
+
+function isProtectedPage(pageId) {
+  return !PUBLIC_PAGES.has(pageId);
+}
 function toList(value) {
   if (Array.isArray(value)) return value;
   if (!value) return [];
@@ -56,41 +63,39 @@ function scoreTone(score) {
   return   { headline: "Needs work",      sub: "Your resume needs significant tailoring for this role.",  color: "#ef4444" };
 }
 
-// ── auth helper — get current session token ────────────────────────────────
+// â”€â”€ auth helper â€” get current session token â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function getToken() {
   const { data: { session } } = await supabase.auth.getSession();
   return session?.access_token || null;
 }
 
-// ── Nav ────────────────────────────────────────────────────────────────────
+// â”€â”€ Nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Nav({ activePage, onNavigate, session }) {
-  const publicItems = [
-    ["matcherPage",      "ResumePilot"],
-    ["aboutPage",        "About ResumePilot"],
+  const protectedItems = [
+    ["matcherPage", "ResumePilot"],
+    ["aboutPage", "About ResumePilot"],
     ["contributorsPage", "Contributors"],
   ];
 
   return (
     <nav className="top-nav" aria-label="Primary navigation">
-      {publicItems.map(([page, label]) => (
-        <button
-          key={page}
-          className={`nav-btn ${
-            activePage === page ||
-            (activePage === "resultPage" && page === "matcherPage")
-              ? "active"
-              : ""
-          }`}
-          type="button"
-          onClick={() => onNavigate(page)}
-        >
-          {label}
-        </button>
-      ))}
-
-      {/* ── FIX 4: show History + Logout when logged in, else Login/Signup ── */}
       {session ? (
         <>
+          {protectedItems.map(([page, label]) => (
+            <button
+              key={page}
+              className={`nav-btn ${
+                activePage === page ||
+                (activePage === "resultPage" && page === "matcherPage")
+                  ? "active"
+                  : ""
+              }`}
+              type="button"
+              onClick={() => onNavigate(page)}
+            >
+              {label}
+            </button>
+          ))}
           <button
             className={`nav-btn ${activePage === "historyPage" ? "active" : ""}`}
             type="button"
@@ -111,6 +116,13 @@ function Nav({ activePage, onNavigate, session }) {
         </>
       ) : (
         <>
+          <button
+            className={`nav-btn ${activePage === "landingPage" ? "active" : ""}`}
+            type="button"
+            onClick={() => onNavigate("landingPage")}
+          >
+            Home
+          </button>
           <button
             className={`nav-btn ${activePage === "loginPage" ? "active" : ""}`}
             type="button"
@@ -142,7 +154,7 @@ function Header({ activePage, onNavigate, session }) {
   );
 }
 
-// ── Landing ────────────────────────────────────────────────────────────────
+// â”€â”€ Landing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function LandingPage({ onStart, onNavigate, session }) {
   return (
     <section className="page-shell" id="landingPage">
@@ -198,7 +210,7 @@ function LandingPage({ onStart, onNavigate, session }) {
               className="btn-primary"
               id="openMatcherBtn"
               type="button"
-              onClick={onStart}
+              onClick={session ? onStart : () => onNavigate("loginPage")}
             >
               <span className="btn-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none">
@@ -217,7 +229,7 @@ function LandingPage({ onStart, onNavigate, session }) {
                   />
                 </svg>
               </span>
-              Upload Resume
+              {session ? "Upload Resume" : "Log In to Upload"}
             </button>
             <div className="hand-note" aria-hidden="true">
               <svg viewBox="0 0 100 58">
@@ -354,7 +366,7 @@ function MockSection({ title, widths }) {
   );
 }
 
-// ── Matcher ────────────────────────────────────────────────────────────────
+// â”€â”€ Matcher â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoading, session }) {
   const [jobTitle,        setJobTitle]        = useState("");
   const [jobDescription,  setJobDescription]  = useState("");
@@ -370,7 +382,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
     setError("");
     setStatus("");
 
-    // ── FIX 2: auth guard — redirect to login if not logged in ────────────
+    // â”€â”€ FIX 2: auth guard â€” redirect to login if not logged in â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (!session) {
       onNavigate("loginPage");
       return;
@@ -390,7 +402,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
     form.append("job_title",       jobTitle.trim());
 
     try {
-      // ── FIX 3: attach JWT so backend can authenticate the user ───────────
+      // â”€â”€ FIX 3: attach JWT so backend can authenticate the user â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       const token = await getToken();
       const response = await fetch(`${API_BASE}/analyze`, {
         method: "POST",
@@ -536,7 +548,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
   );
 }
 
-// ── Result page ────────────────────────────────────────────────────────────
+// â”€â”€ Result page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function ResultPage({ activePage, onNavigate, resultData, renderError, session }) {
   return (
     <section
@@ -557,7 +569,7 @@ function ResultPage({ activePage, onNavigate, resultData, renderError, session }
   );
 }
 
-// ── Results component ──────────────────────────────────────────────────────
+// â”€â”€ Results component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Results({ data, visible = false }) {
   const score        = data?.ats_score ?? 0;
   const tone         = scoreTone(score);
@@ -595,7 +607,7 @@ function Results({ data, visible = false }) {
       </div>
 
       <div className="cards-row">
-        {/* ── FIX 1: corrected all six field names ── */}
+        {/* â”€â”€ FIX 1: corrected all six field names â”€â”€ */}
         <InfoCard
           label="Word Count"
           value={data?.word_count_feedback || "-"}
@@ -682,7 +694,7 @@ function Chip({ text, type }) {
   return <span className={`chip ${type}`}>{text}</span>;
 }
 
-// ── Simple page shell ──────────────────────────────────────────────────────
+// â”€â”€ Simple page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SimplePage({ id, title, activePage, onNavigate, session, children }) {
   return (
     <section
@@ -698,7 +710,7 @@ function SimplePage({ id, title, activePage, onNavigate, session, children }) {
   );
 }
 
-// ── About ──────────────────────────────────────────────────────────────────
+// â”€â”€ About â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function AboutPage(props) {
   return (
     <SimplePage id="aboutPage" title="About ResumePilot" {...props}>
@@ -720,32 +732,32 @@ function AboutPage(props) {
       <hr style={{ margin: "60px 0 40px 0" }} />
       <h2>What It Does</h2>
       <ul>
-        <li><strong>ATS Score</strong> — a blended score calculated using semantic similarity, keyword matching, section quality, and job title alignment</li>
-        <li><strong>Hard & Soft Skill Analysis</strong> — shows which skills from the job description are present in your resume and which are missing</li>
-        <li><strong>Keyword Expansion</strong> — if your resume mentions <em>data analyst</em>, ResumePilot infers related skills like <em>numpy</em> and <em>matplotlib</em> even if they are not explicitly listed</li>
-        <li><strong>Weak Section Detection</strong> — flags resume sections that need improvement</li>
-        <li><strong>Overall Feedback & Suggestions</strong> — actionable recommendations tailored to your resume and the job description</li>
-        <li><strong>GitHub Profile Analysis</strong> — detects GitHub links in your resume, scans profile activity, and factors it into your overall score</li>
-        <li><strong>Word Count Check</strong> — tells you if your resume is too short, too long, or within the ideal 400–800 word range</li>
+        <li><strong>ATS Score</strong> â€” a blended score calculated using semantic similarity, keyword matching, section quality, and job title alignment</li>
+        <li><strong>Hard & Soft Skill Analysis</strong> â€” shows which skills from the job description are present in your resume and which are missing</li>
+        <li><strong>Keyword Expansion</strong> â€” if your resume mentions <em>data analyst</em>, ResumePilot infers related skills like <em>numpy</em> and <em>matplotlib</em> even if they are not explicitly listed</li>
+        <li><strong>Weak Section Detection</strong> â€” flags resume sections that need improvement</li>
+        <li><strong>Overall Feedback & Suggestions</strong> â€” actionable recommendations tailored to your resume and the job description</li>
+        <li><strong>GitHub Profile Analysis</strong> â€” detects GitHub links in your resume, scans profile activity, and factors it into your overall score</li>
+        <li><strong>Word Count Check</strong> â€” tells you if your resume is too short, too long, or within the ideal 400â€“800 word range</li>
       </ul>
       <hr style={{ margin: "60px 0 40px 0" }} />
       <h2>How the ATS Score Is Calculated</h2>
       <div style={{ background: "#f5f5f5", padding: "15px", borderRadius: "5px", fontFamily: "monospace", lineHeight: 1.8 }}>
         <div><strong>ATS Score =</strong></div>
         <div style={{ marginLeft: "20px" }}>
-          <div>Section Score Average × 0.28</div>
-          <div>Hard Skill Match      × 0.35</div>
-          <div>Semantic Similarity   × 0.15</div>
-          <div>Soft Skill Match      × 0.07</div>
-          <div>Job Title Match       × 0.05</div>
-          <div>GitHub Score          × 0.10</div>
+          <div>Section Score Average Ã— 0.28</div>
+          <div>Hard Skill Match      Ã— 0.35</div>
+          <div>Semantic Similarity   Ã— 0.15</div>
+          <div>Soft Skill Match      Ã— 0.07</div>
+          <div>Job Title Match       Ã— 0.05</div>
+          <div>GitHub Score          Ã— 0.10</div>
         </div>
       </div>
     </SimplePage>
   );
 }
 
-// ── Contributors ───────────────────────────────────────────────────────────
+// â”€â”€ Contributors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const contributors = [
   ["Subham Das",         "Backend Developer", "Designed and built the backend pipeline, including FastAPI, PDF parsing, GitHub profile analysis, and the end-to-end /analyze endpoint.",                                "https://github.com/subhamdas29",  "https://linkedin.com/in/subhamdas29"],
   ["Rivo Khara",         "Backend Developer", "Implemented the ATS scoring algorithm, Groq-powered keyword extraction and expansion, and HuggingFace semantic similarity scoring.",                                   "https://github.com/RivoKhara",    "https://www.linkedin.com/in/rivo-khara-9966002b7/"],
@@ -777,7 +789,7 @@ function ContributorsPage(props) {
   );
 }
 
-// ── Auth shell ─────────────────────────────────────────────────────────────
+// â”€â”€ Auth shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function AuthShell({ activePage, onNavigate, session, mode, title, subtitle, children, footer }) {
   return (
     <section
@@ -806,7 +818,7 @@ function AuthShell({ activePage, onNavigate, session, mode, title, subtitle, chi
   );
 }
 
-// ── FIX 2: Login with real Supabase auth ───────────────────────────────────
+// â”€â”€ FIX 2: Login with real Supabase auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function LoginPage(props) {
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
@@ -826,7 +838,7 @@ function LoginPage(props) {
       return;
     }
 
-    // onAuthStateChange in App will update session — navigate to matcher
+    // onAuthStateChange in App will update session â€” navigate to matcher
     props.onNavigate("matcherPage");
     setLoading(false);
   }
@@ -869,7 +881,7 @@ function LoginPage(props) {
   );
 }
 
-// ── FIX 2: Signup with real Supabase auth ──────────────────────────────────
+// â”€â”€ FIX 2: Signup with real Supabase auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SignupPage(props) {
   const [form,    setForm]    = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -893,7 +905,10 @@ function SignupPage(props) {
     const { error } = await supabase.auth.signUp({
       email:    form.email,
       password: form.password,
-      options:  { data: { full_name: form.name } },
+      options:  {
+        data: { full_name: form.name },
+        emailRedirectTo: `${window.location.origin}${window.location.pathname}#login`,
+      },
     });
 
     if (error) {
@@ -962,30 +977,44 @@ function SignupPage(props) {
   );
 }
 
-// ── FIX 4: History page ────────────────────────────────────────────────────
+// â”€â”€ FIX 4: History page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function HistoryPage({ activePage, onNavigate, session }) {
-  const [analyses,  setAnalyses]  = useState([]);
-  const [loading,   setLoading]   = useState(true);
-  const [selected,  setSelected]  = useState(null);  // full scorecard for modal
+  const [analyses, setAnalyses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [historyError, setHistoryError] = useState("");
+  const [selected, setSelected] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (activePage !== "historyPage") return;
-    if (!session) { onNavigate("loginPage"); return; }
+    if (!session) {
+      onNavigate("loginPage");
+      return;
+    }
     fetchHistory();
-  }, [activePage]);
+  }, [activePage, session]);
 
   async function fetchHistory() {
     setLoading(true);
+    setHistoryError("");
     try {
       const token = await getToken();
-      const resp  = await fetch(`${API_BASE}/history`, {
+      if (!token) throw new Error("You are not logged in. Please log in again.");
+
+      const resp = await fetch(`${API_BASE}/history`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await resp.json();
-      setAnalyses(data.analyses || []);
+      const data = await resp.json().catch(() => ({}));
+
+      if (!resp.ok) {
+        throw new Error(formatMessage(data.detail || data.Error || data.error || `History request failed (${resp.status}).`));
+      }
+
+      setAnalyses(Array.isArray(data.analyses) ? data.analyses : []);
     } catch (e) {
       console.error("History fetch failed:", e);
+      setHistoryError(e.message || "History fetch failed.");
+      setAnalyses([]);
     } finally {
       setLoading(false);
     }
@@ -996,13 +1025,19 @@ function HistoryPage({ activePage, onNavigate, session }) {
     setSelected(null);
     try {
       const token = await getToken();
-      const resp  = await fetch(`${API_BASE}/history/${id}`, {
+      if (!token) throw new Error("You are not logged in. Please log in again.");
+
+      const resp = await fetch(`${API_BASE}/history/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await resp.json();
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        throw new Error(formatMessage(data.detail || data.Error || data.error || `Scorecard request failed (${resp.status}).`));
+      }
       setSelected(data);
     } catch (e) {
       console.error("Scorecard fetch failed:", e);
+      setSelected({ error: e.message || "Could not load scorecard." });
     }
   }
 
@@ -1020,23 +1055,32 @@ function HistoryPage({ activePage, onNavigate, session }) {
       <Header activePage={activePage} onNavigate={onNavigate} session={session} />
       <main className="simple-content">
         <h2>My Score History</h2>
+        <p style={{ color: "#888", fontSize: "12px", marginTop: "-8px" }}>
+          Backend: {API_BASE}
+        </p>
 
         {loading && <p style={{ color: "#888" }}>Loading your analyses...</p>}
 
-        {!loading && analyses.length === 0 && (
+        {historyError && (
+          <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", color: "#be123c", borderRadius: "10px", padding: "14px 16px", marginTop: "18px", fontWeight: 700 }}>
+            {historyError}
+          </div>
+        )}
+
+        {!loading && !historyError && analyses.length === 0 && (
           <p style={{ color: "#888" }}>
             No analyses yet.{" "}
             <button
               type="button"
               onClick={() => onNavigate("matcherPage")}
-              style={{ color: "#4f7cff", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
+              style={{ color: "#ec6ead", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
             >
-              Run your first one →
+              Run your first one
             </button>
           </p>
         )}
 
-        {!loading && analyses.length > 0 && (
+        {!loading && !historyError && analyses.length > 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "24px" }}>
             {analyses.map((a) => (
               <div
@@ -1047,13 +1091,13 @@ function HistoryPage({ activePage, onNavigate, session }) {
                   background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "10px",
                   padding: "18px 24px", cursor: "pointer", transition: "border-color 0.2s",
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#4f7cff"}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#ec6ead"}
                 onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e5e7eb"}
               >
                 <div>
                   <div style={{ fontWeight: 700, fontSize: "16px" }}>{a.job_title || "Untitled"}</div>
                   <div style={{ fontSize: "13px", color: "#888", marginTop: "3px" }}>
-                    {new Date(a.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    {a.created_at ? new Date(a.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "Saved analysis"}
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -1068,7 +1112,6 @@ function HistoryPage({ activePage, onNavigate, session }) {
         )}
       </main>
 
-      {/* Modal */}
       {modalOpen && (
         <div
           onClick={(e) => { if (e.target === e.currentTarget) setModalOpen(false); }}
@@ -1087,16 +1130,20 @@ function HistoryPage({ activePage, onNavigate, session }) {
               onClick={() => setModalOpen(false)}
               style={{ position: "absolute", top: "16px", right: "20px", background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#888" }}
             >
-              ✕
+              x
             </button>
 
             {!selected ? (
               <p>Loading scorecard...</p>
+            ) : selected.error ? (
+              <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", color: "#be123c", borderRadius: "10px", padding: "14px 16px", fontWeight: 700 }}>
+                {selected.error}
+              </div>
             ) : (
               <>
                 <h3 style={{ fontSize: "22px", fontWeight: 800, marginBottom: "4px" }}>{selected.job_title || "Untitled"}</h3>
                 <p style={{ color: "#888", fontSize: "13px", marginBottom: "24px" }}>
-                  {new Date(selected.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+                  {selected.created_at ? new Date(selected.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "Saved analysis"}
                 </p>
 
                 <div style={{ textAlign: "center", marginBottom: "28px" }}>
@@ -1115,23 +1162,29 @@ function HistoryPage({ activePage, onNavigate, session }) {
     </section>
   );
 }
-
-// ── App root ───────────────────────────────────────────────────────────────
 export default function App() {
   const [hasValidResults, setHasValidResults] = useState(false);
-  const [activePage,      setActivePage]      = useState(() => pageFromHash(false));
+  const [activePage,      setActivePage]      = useState("landingPage");
   const [resultData,      setResultData]      = useState(null);
   const [renderError,     setRenderError]     = useState("");
-  const [session,         setSession]         = useState(null);   // ← Supabase session
+  const [session,         setSession]         = useState(null);   // â† Supabase session
+  const [authReady,       setAuthReady]       = useState(false);
 
-  // ── listen for auth state changes (login / logout / token refresh) ────────
+  // â”€â”€ listen for auth state changes (login / logout / token refresh) â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-    });
+      setActivePage(pageFromHash(hasValidResults, session, true));
+    }).finally(() => setAuthReady(true));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      setAuthReady(true);
+      setActivePage((currentPage) =>
+        !session && isProtectedPage(currentPage)
+          ? "landingPage"
+          : pageFromHash(hasValidResults, session, true)
+      );
     });
 
     return () => subscription.unsubscribe();
@@ -1139,7 +1192,7 @@ export default function App() {
 
   useEffect(() => {
     function restorePageState() {
-      setActivePage(pageFromHash(hasValidResults));
+      setActivePage(pageFromHash(hasValidResults, session, authReady));
     }
     window.addEventListener("popstate",   restorePageState);
     window.addEventListener("hashchange", restorePageState);
@@ -1147,20 +1200,21 @@ export default function App() {
       window.removeEventListener("popstate",   restorePageState);
       window.removeEventListener("hashchange", restorePageState);
     };
-  }, [hasValidResults]);
+  }, [hasValidResults, session, authReady]);
 
   const navigate = useMemo(() => (pageId, replace = false) => {
-    setActivePage(pageId);
-    const hash = pageHashMap[pageId];
+    const targetPage = !session && isProtectedPage(pageId) ? "loginPage" : pageId;
+    setActivePage(targetPage);
+    const hash = pageHashMap[targetPage];
     if (hash) {
       const url = `#${hash}`;
       replace
         ? window.history.replaceState(null, "", url)
         : window.history.pushState(null, "",  url);
-      sessionStorage.setItem("resumePilotPage", pageId);
+      sessionStorage.setItem("resumePilotPage", targetPage);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  }, [session]);
 
   function handleResultLoading() {
     setRenderError("");
@@ -1183,11 +1237,12 @@ export default function App() {
     }
   }
 
-  const sharedProps = { activePage, onNavigate: navigate, session };
+  const effectiveActivePage = authReady && !session && isProtectedPage(activePage) ? "landingPage" : activePage;
+  const sharedProps = { activePage: effectiveActivePage, onNavigate: navigate, session };
 
   return (
     <>
-      {activePage === "landingPage" && (
+      {effectiveActivePage === "landingPage" && (
         <LandingPage onStart={() => navigate("matcherPage")} {...sharedProps} />
       )}
       <MatcherPage    {...sharedProps} resultData={resultData} onResult={handleResult} onResultLoading={handleResultLoading} />
@@ -1196,7 +1251,11 @@ export default function App() {
       <ContributorsPage {...sharedProps} />
       <LoginPage      {...sharedProps} />
       <SignupPage      {...sharedProps} />
-      <HistoryPage    {...sharedProps} />   {/* ← FIX 4 */}
+      <HistoryPage    {...sharedProps} />   {/* â† FIX 4 */}
     </>
   );
 }
+
+
+
+
