@@ -1,5 +1,12 @@
 def get_job_title_score(resume_keywords, user_job_title):
-    resume_titles = [char.lower() for char in resume_keywords.get("job_title", [])]
+    resume_titles = [
+        str(title).lower()
+        for title in (
+            resume_keywords.get("job_titles")
+            or resume_keywords.get("job_title")
+            or []
+        )
+    ]
     user_title    = user_job_title.lower()
 
     for title in resume_titles:

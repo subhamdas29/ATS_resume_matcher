@@ -51,8 +51,20 @@ async def calculate_ats_score(resume_keywords, jd_keywords, job_title_score: int
 
     
 
-    # average all section scores into one number
-    section_score_avg = sum(section_scores.values()) / len(section_scores)
+    # average all numeric section scores into one number
+    numeric_section_scores = []
+    for value in section_scores.values():
+        if isinstance(value, dict):
+            value = value.get("score", 0)
+        try:
+            numeric_section_scores.append(float(value))
+        except (TypeError, ValueError):
+            pass
+    section_score_avg = (
+        sum(numeric_section_scores) / len(numeric_section_scores)
+        if numeric_section_scores
+        else 0
+    )
 
     hard_skill=len(hard_skill_matched_keywords) + len(hard_skill_missing_keywords)
     soft_skill=len(soft_skill_matched_keywords) + len(soft_skill_missing_keywords)
@@ -80,7 +92,8 @@ async def calculate_ats_score(resume_keywords, jd_keywords, job_title_score: int
         "weak_sections": analysis.get("weak_sections", []),
         "suggestions": analysis.get("suggestions", []),
         "feedback": analysis.get("overall_feedback", []),
-        "github": gh_msg
+        "github": gh_msg,
+        "section_scores": section_scores,
     }
 
     else:

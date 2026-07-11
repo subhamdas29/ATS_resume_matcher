@@ -9,7 +9,7 @@ identical to what this file returned before, so ATS_score.py, suggestions.py,
 and main.py are completely unaffected.
 """
 
-from backend.ml.extractor import extract_keywords
+from ml.extractor import extract_keywords
 
 
 def get_keywords(resume_text: str) -> dict:
