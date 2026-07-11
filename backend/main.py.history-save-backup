@@ -125,4 +125,3 @@ def normalize_result(raw: dict, word_count_feedback: str, job_title_match: str) 
         "section_scores": raw.get("section_scores", {}),
     }
 
-
