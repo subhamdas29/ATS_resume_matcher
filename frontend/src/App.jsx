@@ -31,6 +31,7 @@ function pageFromHash(hasResults, session = null, authReady = true) {
   if (!hash) return "landingPage";
   const page = hashPageMap[hash] || "landingPage";
   if (!authReady) return page;
+  if (session && (page === "loginPage" || page === "signupPage")) return "matcherPage";
   if (!session && isProtectedPage(page)) return "loginPage";
   if (page === "resultPage" && !hasResults) return "matcherPage";
   return page;
@@ -838,8 +839,9 @@ function LoginPage(props) {
       return;
     }
 
-    // onAuthStateChange in App will update session â€” navigate to matcher
-    props.onNavigate("matcherPage");
+    // onAuthStateChange in App will update session; move away from the auth URL immediately.
+    window.history.replaceState(null, "", "#matcher");
+    props.onNavigate("matcherPage", true);
     setLoading(false);
   }
 
@@ -1203,7 +1205,11 @@ export default function App() {
   }, [hasValidResults, session, authReady]);
 
   const navigate = useMemo(() => (pageId, replace = false) => {
-    const targetPage = !session && isProtectedPage(pageId) ? "loginPage" : pageId;
+    const targetPage = session && (pageId === "loginPage" || pageId === "signupPage")
+      ? "matcherPage"
+      : !session && isProtectedPage(pageId)
+        ? "loginPage"
+        : pageId;
     setActivePage(targetPage);
     const hash = pageHashMap[targetPage];
     if (hash) {
