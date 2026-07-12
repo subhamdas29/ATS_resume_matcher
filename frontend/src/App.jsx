@@ -1453,6 +1453,7 @@ function JobPortalSection({ activePage, onNavigate, session, jobData, jobError, 
 }
 export default function App() {
   const [hasValidResults, setHasValidResults] = useState(false);
+  const hasValidResultsRef = useRef(false);
   const [activePage,      setActivePage]      = useState("landingPage");
   const [resultData,      setResultData]      = useState(null);
   const [renderError,     setRenderError]     = useState("");
@@ -1465,7 +1466,7 @@ export default function App() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setActivePage(pageFromHash(hasValidResults, session, true));
+      setActivePage(pageFromHash(hasValidResultsRef.current, session, true));
     }).finally(() => setAuthReady(true));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -1474,7 +1475,7 @@ export default function App() {
       setActivePage((currentPage) =>
         !session && isProtectedPage(currentPage)
           ? "landingPage"
-          : pageFromHash(hasValidResults, session, true)
+          : pageFromHash(hasValidResultsRef.current, session, true)
       );
     });
 
@@ -1528,8 +1529,9 @@ export default function App() {
     try {
       setJobData([]); 
       setResultData(data);
-      fetchJobs(data);
+      hasValidResultsRef.current = true;
       setHasValidResults(true);
+      fetchJobs(data);
       setRenderError("");
       navigate("resultPage", true);
     } catch (err) {
@@ -1552,6 +1554,7 @@ export default function App() {
 
     setJobLoading(true);
     setJobError("");
+    sessionStorage.setItem("resumePilotJobsTouched", "true");
 
     try {
       const resp = await fetch(`${API_BASE}/jobs`, {
@@ -1581,10 +1584,13 @@ export default function App() {
       sessionStorage.removeItem("resumePilotJobError");
     } catch (e) {
       console.error("[jobs] fetch failed:", e);
-      setJobError(e.message || "Could not load job suggestions.");
+      const message = e.message === "Failed to fetch"
+        ? "Could not reach the job search backend. Make sure the backend is running and VITE_API_URL is correct."
+        : e.message || "Could not load job suggestions.";
+      setJobError(message);
       setJobData([]);
       sessionStorage.setItem("resumePilotJobs", "[]");
-      sessionStorage.setItem("resumePilotJobError", e.message || "Could not load job suggestions.");
+      sessionStorage.setItem("resumePilotJobError", message);
     } finally {
       setJobLoading(false);
     }
@@ -1596,24 +1602,11 @@ export default function App() {
       : authReady && !session && isProtectedPage(activePage)
         ? "landingPage"
         : activePage;
-  const effectiveActivePage = authReady && !session && isProtectedPage(activePage) ? "landingPage" : activePage;
 
   useEffect(() => {
     if (effectiveActivePage !== "resultPage" && effectiveActivePage !== "jobsPage") return;
 
     restoreStoredJobs();
-
-    function resumePilotJobsRestore() {
-      restoreStoredJobs();
-    }
-
-    window.addEventListener("focus", resumePilotJobsRestore);
-    document.addEventListener("visibilitychange", resumePilotJobsRestore);
-
-    return () => {
-      window.removeEventListener("focus", resumePilotJobsRestore);
-      document.removeEventListener("visibilitychange", resumePilotJobsRestore);
-    };
   }, [effectiveActivePage]);
   const sharedProps = { activePage: effectiveActivePage, onNavigate: navigate, session };
 
