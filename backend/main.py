@@ -1,7 +1,9 @@
-﻿import os
+﻿from job_search import search_jobs
+import os
 import shutil
 from pathlib import Path
-
+from job_search import search_jobs
+from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -109,6 +111,29 @@ async def get_scorecard(
     return scorecard
 
 
+class JobSearchRequest(BaseModel):
+    job_title:            str
+    matched_hard_skills:  list[str] = []
+    results_per_page:     int = 8
+
+@app.post("/jobs")
+async def get_job_suggestions(
+    body: JobSearchRequest,
+    user_id: str = Depends(get_current_user),   # requires login
+):
+    """
+    Takes the job title and matched skills from an analysis result
+    and returns relevant open job listings from Adzuna.
+    Called by the frontend immediately after /analyze returns.
+    """
+    jobs = await search_jobs(
+        job_title=body.job_title,
+        matched_hard_skills=body.matched_hard_skills,
+        results_per_page=body.results_per_page,
+    )
+    return {"jobs": jobs, "query_title": body.job_title}
+
+
 def normalize_result(raw: dict, word_count_feedback: str, job_title_match: str) -> dict:
     return {
         "ats_score": raw.get("ats_score"),
@@ -124,5 +149,9 @@ def normalize_result(raw: dict, word_count_feedback: str, job_title_match: str) 
         "missing_soft_skills": raw.get("missing_soft_skills") or raw.get("soft_skills_missing", []),
         "section_scores": raw.get("section_scores", {}),
     }
+
+
+
+
 
 
