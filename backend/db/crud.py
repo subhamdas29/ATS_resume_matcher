@@ -34,7 +34,7 @@ def save_analysis(result: dict, job_title: str, user_id: str) -> str | None:
         analysis_row = {
             "user_id": user_id,
             "job_title": job_title,
-            "ats_score": result.get("ats_score"),
+            "ats_score": round(result.get("ats_score") or 0),
             "word_count_feedback": result.get("word_count_feedback"),
             "github_status": result.get("github_status"),
             "overall_feedback": result.get("feedback") or result.get("overall_feedback"),
