@@ -855,9 +855,8 @@ function LoginPage(props) {
       return;
     }
 
-    // onAuthStateChange in App will update session; move away from the auth URL immediately.
+    // onAuthStateChange in App will update session and move away from the auth URL.
     window.history.replaceState(null, "", "#matcher");
-    props.onNavigate("matcherPage", true);
     setLoading(false);
   }
 
@@ -1591,6 +1590,12 @@ export default function App() {
     }
   }
 
+  const effectiveActivePage =
+    authReady && session && (activePage === "loginPage" || activePage === "signupPage")
+      ? "matcherPage"
+      : authReady && !session && isProtectedPage(activePage)
+        ? "landingPage"
+        : activePage;
   const effectiveActivePage = authReady && !session && isProtectedPage(activePage) ? "landingPage" : activePage;
 
   useEffect(() => {
