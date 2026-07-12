@@ -13,7 +13,8 @@ const pageHashMap = {
   contributorsPage: "contributors",
   loginPage:        "login",
   signupPage:       "signup",
-  historyPage:      "history",   // â† NEW
+  historyPage:      "history",
+  jobsPage:         "jobs",   // â† NEW
 };
 
 const hashPageMap = {
@@ -23,7 +24,8 @@ const hashPageMap = {
   contributors: "contributorsPage",
   login:        "loginPage",
   signup:       "signupPage",
-  history:      "historyPage",   // â† NEW
+  history:      "historyPage",
+  jobs:         "jobsPage",   // â† NEW
 };
 
 function pageFromHash(hasResults, session = null, authReady = true) {
@@ -56,6 +58,18 @@ function formatMessage(value) {
   return String(value || "");
 }
 
+
+function readStoredJobs() {
+  try {
+    return JSON.parse(sessionStorage.getItem("resumePilotJobs") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function readStoredJobError() {
+  return sessionStorage.getItem("resumePilotJobError") || "";
+}
 function scoreTone(score) {
   if (score >= 70)
     return { headline: "Strong match",    sub: "Your resume is well-aligned with this role.",             color: "#22c55e" };
@@ -550,7 +564,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
 }
 
 // â”€â”€ Result page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function ResultPage({ activePage, onNavigate, resultData, renderError, session }) {
+function ResultPage({ activePage, onNavigate, resultData, renderError, session, jobData, jobError }) {
   return (
     <section
       className={`result-page ${activePage === "resultPage" ? "visible" : ""}`}
@@ -561,7 +575,9 @@ function ResultPage({ activePage, onNavigate, resultData, renderError, session }
         {renderError ? (
           <div className="results-render-error">{renderError}</div>
         ) : resultData ? (
-          <Results data={resultData} visible />
+          <>
+            <Results data={resultData} visible />
+          </>
         ) : (
           <div className="results-loading">Preparing your results...</div>
         )}
@@ -1164,6 +1180,278 @@ function HistoryPage({ activePage, onNavigate, session }) {
     </section>
   );
 }
+function JobSuggestions({ jobs }) {
+  const [expanded, setExpanded] = useState(null);
+
+  if (!jobs || jobs.length === 0) return null;
+
+  function formatSalary(min, max) {
+    if (!min && !max) return null;
+    const fmt = (n) =>
+      n >= 100000
+        ? `₹${(n / 100000).toFixed(1)}L`
+        : `₹${Math.round(n).toLocaleString("en-IN")}`;
+    if (min && max) return `${fmt(min)} – ${fmt(max)}`;
+    if (min) return `From ${fmt(min)}`;
+    return `Up to ${fmt(max)}`;
+  }
+
+  function timeAgo(dateStr) {
+    if (!dateStr) return "";
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const days = Math.floor(diff / 86400000);
+    if (days === 0) return "Today";
+    if (days === 1) return "Yesterday";
+    if (days < 7)  return `${days}d ago`;
+    if (days < 30) return `${Math.floor(days / 7)}w ago`;
+    return `${Math.floor(days / 30)}mo ago`;
+  }
+
+  return (
+    <div
+      style={{
+        marginTop: "40px",
+        borderTop: "2px solid #e4ecfb",
+        paddingTop: "32px",
+      }}
+    >
+      {/* header */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        <span
+          style={{
+            display: "inline-block",
+            width: "12px",
+            height: "12px",
+            borderRadius: "50%",
+            background: "#ec6ead",
+            flexShrink: 0,
+          }}
+        />
+        <h4
+          style={{
+            fontSize: "18px",
+            fontWeight: 800,
+            margin: 0,
+            color: "#1a2430",
+          }}
+        >
+          Relevant Jobs You Can Apply To
+        </h4>
+        <span
+          style={{
+            marginLeft: "auto",
+            fontSize: "12px",
+            color: "#888",
+            fontStyle: "italic",
+          }}
+        >
+          Powered by Adzuna
+        </span>
+      </div>
+
+      {/* job cards grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: "16px",
+        }}
+      >
+        {jobs.map((job) => {
+          const salary = formatSalary(job.salary_min, job.salary_max);
+          const isOpen = expanded === job.id;
+
+          return (
+            <div
+              key={job.id}
+              style={{
+                background: "#fff",
+                border: "1px solid #e5e7eb",
+                borderRadius: "12px",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                transition: "border-color 0.2s, box-shadow 0.2s",
+                boxShadow: isOpen ? "0 4px 20px rgba(0,0,0,0.08)" : "none",
+                borderColor: isOpen ? "#ec6ead" : "#e5e7eb",
+              }}
+            >
+              {/* title + company */}
+              <div>
+                <div
+                  style={{
+                    fontWeight: 700,
+                    fontSize: "15px",
+                    color: "#1a2430",
+                    lineHeight: 1.35,
+                    marginBottom: "4px",
+                  }}
+                >
+                  {job.title}
+                </div>
+                <div style={{ fontSize: "13px", color: "#555", fontWeight: 600 }}>
+                  {job.company}
+                </div>
+              </div>
+
+              {/* meta row */}
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  fontSize: "12px",
+                  color: "#777",
+                }}
+              >
+                {job.location && (
+                  <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                    📍 {job.location}
+                  </span>
+                )}
+                {job.category && (
+                  <span
+                    style={{
+                      background: "#f0f4ff",
+                      color: "#4f7cff",
+                      padding: "2px 8px",
+                      borderRadius: "20px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {job.category}
+                  </span>
+                )}
+                {timeAgo(job.created) && (
+                  <span style={{ marginLeft: "auto" }}>{timeAgo(job.created)}</span>
+                )}
+              </div>
+
+              {/* salary */}
+              {salary && (
+                <div
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: 700,
+                    color: "#22c55e",
+                  }}
+                >
+                  {salary} / year
+                </div>
+              )}
+
+              {/* description toggle */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setExpanded(isOpen ? null : job.id)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#4f7cff",
+                    fontSize: "12px",
+                    cursor: "pointer",
+                    padding: 0,
+                    fontWeight: 600,
+                  }}
+                >
+                  {isOpen ? "Hide description ▲" : "Show description ▼"}
+                </button>
+
+                {isOpen && (
+                  <p
+                    style={{
+                      fontSize: "13px",
+                      color: "#555",
+                      lineHeight: 1.6,
+                      marginTop: "10px",
+                      padding: "10px",
+                      background: "#f9fafb",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    {job.description}
+                  </p>
+                )}
+              </div>
+
+              {/* apply button */}
+              <a
+                href={job.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "block",
+                  textAlign: "center",
+                  background: "#ec6ead",
+                  color: "#fff",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  fontWeight: 700,
+                  fontSize: "13px",
+                  textDecoration: "none",
+                  marginTop: "auto",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#d4579a")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#ec6ead")}
+              >
+                Apply Now →
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function JobPortalSection({ activePage, onNavigate, session, jobData, jobError, jobLoading }) {
+  if (activePage !== "resultPage" && activePage !== "jobsPage") return null;
+  const jobsTouched = sessionStorage.getItem("resumePilotJobsTouched") === "true";
+
+  return (
+    <section className="simple-page visible" id="jobPortalSection">
+      {activePage === "jobsPage" && <Header activePage={activePage} onNavigate={onNavigate} session={session} />}
+      <main className="simple-content">
+        <h2>Relevant Jobs You Can Apply To</h2>
+        <p style={{ color: "#667085", marginTop: "-8px" }}>
+          Curated from your resume analysis and matched skills.
+        </p>
+
+        {jobLoading && (
+          <div style={{ background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "10px", padding: "16px", marginTop: "20px", color: "#667085", fontWeight: 700 }}>
+            Loading job suggestions...
+          </div>
+        )}
+
+        {jobError && (
+          <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", color: "#be123c", borderRadius: "10px", padding: "14px 16px", marginTop: "20px", fontWeight: 700 }}>
+            {jobError}
+          </div>
+        )}
+
+        {!jobLoading && !jobError && jobsTouched && (!jobData || jobData.length === 0) && (
+          <div style={{ background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "10px", padding: "16px", marginTop: "20px", color: "#667085", fontWeight: 700 }}>
+            No matching jobs found for this analysis yet.
+          </div>
+        )}
+
+        {!jobLoading && !jobError && jobData && jobData.length > 0 && (
+          <JobSuggestions jobs={jobData} />
+        )}
+      </main>
+    </section>
+  );
+}
 export default function App() {
   const [hasValidResults, setHasValidResults] = useState(false);
   const [activePage,      setActivePage]      = useState("landingPage");
@@ -1171,7 +1459,9 @@ export default function App() {
   const [renderError,     setRenderError]     = useState("");
   const [session,         setSession]         = useState(null);   // â† Supabase session
   const [authReady,       setAuthReady]       = useState(false);
-
+  const [jobData, setJobData] = useState(readStoredJobs);
+  const [jobError, setJobError] = useState(readStoredJobError);
+  const [jobLoading, setJobLoading] = useState(false);
   // â”€â”€ listen for auth state changes (login / logout / token refresh) â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -1204,6 +1494,13 @@ export default function App() {
     };
   }, [hasValidResults, session, authReady]);
 
+
+  function restoreStoredJobs() {
+    const storedJobs = readStoredJobs();
+    const storedJobError = readStoredJobError();
+    setJobData(storedJobs);
+    setJobError(storedJobError);
+  }
   const navigate = useMemo(() => (pageId, replace = false) => {
     const targetPage = session && (pageId === "loginPage" || pageId === "signupPage")
       ? "matcherPage"
@@ -1230,7 +1527,9 @@ export default function App() {
 
   function handleResult(data) {
     try {
+      setJobData([]); 
       setResultData(data);
+      fetchJobs(data);
       setHasValidResults(true);
       setRenderError("");
       navigate("resultPage", true);
@@ -1242,8 +1541,75 @@ export default function App() {
       navigate("resultPage", true);
     }
   }
+  async function fetchJobs(data) {
+    const token = await getToken();
+    if (!token) {
+      setJobError("Please log in again to load job suggestions.");
+      setJobData([]);
+      sessionStorage.setItem("resumePilotJobs", "[]");
+      sessionStorage.setItem("resumePilotJobError", "Please log in again to load job suggestions.");
+      return;
+    }
+
+    setJobLoading(true);
+    setJobError("");
+
+    try {
+      const resp = await fetch(`${API_BASE}/jobs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          job_title: data.job_title || data.job_title_match?.job_title || data.job_title_match || "",
+          matched_hard_skills: data.matched_hard_skills || [],
+          results_per_page: 8,
+          country: "in",
+        }),
+      });
+
+      const result = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        throw new Error(formatMessage(result.detail || result.error || result.Error || `Jobs request failed (${resp.status})`));
+      }
+
+      const jobs = Array.isArray(result.jobs) ? result.jobs : [];
+      setJobData(jobs);
+      setJobError("");
+      sessionStorage.setItem("resumePilotJobs", JSON.stringify(jobs));
+      sessionStorage.setItem("resumePilotJobsTouched", "true");
+      sessionStorage.removeItem("resumePilotJobError");
+    } catch (e) {
+      console.error("[jobs] fetch failed:", e);
+      setJobError(e.message || "Could not load job suggestions.");
+      setJobData([]);
+      sessionStorage.setItem("resumePilotJobs", "[]");
+      sessionStorage.setItem("resumePilotJobError", e.message || "Could not load job suggestions.");
+    } finally {
+      setJobLoading(false);
+    }
+  }
 
   const effectiveActivePage = authReady && !session && isProtectedPage(activePage) ? "landingPage" : activePage;
+
+  useEffect(() => {
+    if (effectiveActivePage !== "resultPage" && effectiveActivePage !== "jobsPage") return;
+
+    restoreStoredJobs();
+
+    function resumePilotJobsRestore() {
+      restoreStoredJobs();
+    }
+
+    window.addEventListener("focus", resumePilotJobsRestore);
+    document.addEventListener("visibilitychange", resumePilotJobsRestore);
+
+    return () => {
+      window.removeEventListener("focus", resumePilotJobsRestore);
+      document.removeEventListener("visibilitychange", resumePilotJobsRestore);
+    };
+  }, [effectiveActivePage]);
   const sharedProps = { activePage: effectiveActivePage, onNavigate: navigate, session };
 
   return (
@@ -1252,7 +1618,8 @@ export default function App() {
         <LandingPage onStart={() => navigate("matcherPage")} {...sharedProps} />
       )}
       <MatcherPage    {...sharedProps} resultData={resultData} onResult={handleResult} onResultLoading={handleResultLoading} />
-      <ResultPage     {...sharedProps} resultData={resultData} renderError={renderError} />
+      <ResultPage {...sharedProps} resultData={resultData} renderError={renderError} />
+      <JobPortalSection {...sharedProps} jobData={jobData} jobError={jobError} jobLoading={jobLoading} />
       <AboutPage      {...sharedProps} />
       <ContributorsPage {...sharedProps} />
       <LoginPage      {...sharedProps} />
@@ -1261,6 +1628,13 @@ export default function App() {
     </>
   );
 }
+
+
+
+
+
+
+
 
 
 
