@@ -233,7 +233,8 @@ Requires Authorization: Bearer <token> header. Returns all past scorecards for t
 }
 ```
 
-GET /history/{analysis_id}
+### `GET /history/{analysis_id}`
+
 Requires Authorization: Bearer <token> header. Returns one specific scorecard belonging to the authenticated user.
 Response: Same shape as a single item from /history, returns 404 if not found or not owned by the requesting user.
 ---
