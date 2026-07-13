@@ -1,5 +1,4 @@
-﻿from job_search import search_jobs
-import os
+﻿import os
 import shutil
 from pathlib import Path
 from job_search import search_jobs
