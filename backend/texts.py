@@ -20,7 +20,7 @@ def get_texts(file_path: str):
                         if annot_match:
                             username = annot_match.group(1)
     
-    # 3. Fallback to Plain Text Regex (Method 2) if Method 1 found nothing
+    
     if not username:
         found = re.search(r'(?:https?://[^ \t\n\r\fv]*|www\.)?github\.com/([a-zA-Z0-9\-_]+)', text, re.IGNORECASE)
         if found:

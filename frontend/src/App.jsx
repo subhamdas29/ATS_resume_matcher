@@ -5,7 +5,7 @@ const API_BASE = (
   (window.ENV_API_URL || import.meta.env.VITE_API_URL || "").replace(/\/$/, "")
 ) || "https://atsresumematcher-production.up.railway.app";
 
-// â”€â”€ FIX 1: added "historyPage" to both maps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 const pageHashMap = {
   matcherPage:      "matcher",
   resultPage:       "results",
@@ -14,7 +14,7 @@ const pageHashMap = {
   loginPage:        "login",
   signupPage:       "signup",
   historyPage:      "history",
-  jobsPage:         "jobs",   // â† NEW
+  jobsPage:         "jobs",   
 };
 
 const hashPageMap = {
@@ -25,7 +25,7 @@ const hashPageMap = {
   login:        "loginPage",
   signup:       "signupPage",
   history:      "historyPage",
-  jobs:         "jobsPage",   // â† NEW
+  jobs:         "jobsPage",   
 };
 
 function pageFromHash(hasResults, session = null, authReady = true) {
@@ -78,13 +78,13 @@ function scoreTone(score) {
   return   { headline: "Needs work",      sub: "Your resume needs significant tailoring for this role.",  color: "#ef4444" };
 }
 
-// â”€â”€ auth helper â€” get current session token â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 async function getToken() {
   const { data: { session } } = await supabase.auth.getSession();
   return session?.access_token || null;
 }
 
-// â”€â”€ Nav â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function Nav({ activePage, onNavigate, session }) {
   const protectedItems = [
     ["matcherPage", "ResumePilot"],
@@ -169,7 +169,7 @@ function Header({ activePage, onNavigate, session }) {
   );
 }
 
-// â”€â”€ Landing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function LandingPage({ onStart, onNavigate, session }) {
   return (
     <section className="page-shell" id="landingPage">
@@ -381,7 +381,7 @@ function MockSection({ title, widths }) {
   );
 }
 
-// â”€â”€ Matcher â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoading, session }) {
   const [jobTitle,        setJobTitle]        = useState("");
   const [jobDescription,  setJobDescription]  = useState("");
@@ -397,7 +397,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
     setError("");
     setStatus("");
 
-    // â”€â”€ FIX 2: auth guard â€” redirect to login if not logged in â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    
     if (!session) {
       onNavigate("loginPage");
       return;
@@ -417,7 +417,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
     form.append("job_title",       jobTitle.trim());
 
     try {
-      // â”€â”€ FIX 3: attach JWT so backend can authenticate the user â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     
       const token = await getToken();
       const response = await fetch(`${API_BASE}/analyze`, {
         method: "POST",
@@ -563,7 +563,7 @@ function MatcherPage({ activePage, onNavigate, resultData, onResult, onResultLoa
   );
 }
 
-// â”€â”€ Result page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function ResultPage({ activePage, onNavigate, resultData, renderError, session, jobData, jobError }) {
   return (
     <section
@@ -586,7 +586,7 @@ function ResultPage({ activePage, onNavigate, resultData, renderError, session, 
   );
 }
 
-// â”€â”€ Results component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function Results({ data, visible = false }) {
   const score        = data?.ats_score ?? 0;
   const tone         = scoreTone(score);
@@ -624,7 +624,7 @@ function Results({ data, visible = false }) {
       </div>
 
       <div className="cards-row">
-        {/* â”€â”€ FIX 1: corrected all six field names â”€â”€ */}
+        {}
         <InfoCard
           label="Word Count"
           value={data?.word_count_feedback || "-"}
@@ -711,7 +711,7 @@ function Chip({ text, type }) {
   return <span className={`chip ${type}`}>{text}</span>;
 }
 
-// â”€â”€ Simple page shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function SimplePage({ id, title, activePage, onNavigate, session, children }) {
   return (
     <section
@@ -727,7 +727,7 @@ function SimplePage({ id, title, activePage, onNavigate, session, children }) {
   );
 }
 
-// â”€â”€ About â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function AboutPage(props) {
   return (
     <SimplePage id="aboutPage" title="About ResumePilot" {...props}>
@@ -774,7 +774,7 @@ function AboutPage(props) {
   );
 }
 
-// â”€â”€ Contributors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 const contributors = [
   ["Subham Das",         "Lead Backend Developer", "Architected and built the entire backend pipeline — FastAPI REST API, PDF parsing, async orchestration of Groq, HuggingFace, and GitHub APIs, spaCy NER + Entity Ruler ML pipeline, Supabase database integration with JWT auth, and Adzuna job suggestion feature.",                                "https://github.com/subhamdas29",  "https://linkedin.com/in/subhamdas29"],
   ["Rivo Khara",         "ML & Backend Developer", "Implemented the core ATS scoring algorithm, Groq-powered keyword extraction and expansion, HuggingFace semantic similarity scoring, and the weighted six-signal score formula that powers the final ATS result.",                                   "https://github.com/RivoKhara",    "https://www.linkedin.com/in/rivo-khara-9966002b7/"],
@@ -806,7 +806,7 @@ function ContributorsPage(props) {
   );
 }
 
-// â”€â”€ Auth shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function AuthShell({ activePage, onNavigate, session, mode, title, subtitle, children, footer }) {
   return (
     <section
@@ -835,7 +835,7 @@ function AuthShell({ activePage, onNavigate, session, mode, title, subtitle, chi
   );
 }
 
-// â”€â”€ FIX 2: Login with real Supabase auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function LoginPage(props) {
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
@@ -898,7 +898,7 @@ function LoginPage(props) {
   );
 }
 
-// â”€â”€ FIX 2: Signup with real Supabase auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function SignupPage(props) {
   const [form,    setForm]    = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -994,7 +994,7 @@ function SignupPage(props) {
   );
 }
 
-// â”€â”€ FIX 4: History page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 function HistoryPage({ activePage, onNavigate, session }) {
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -1457,12 +1457,12 @@ export default function App() {
   const [activePage,      setActivePage]      = useState("landingPage");
   const [resultData,      setResultData]      = useState(null);
   const [renderError,     setRenderError]     = useState("");
-  const [session,         setSession]         = useState(null);   // â† Supabase session
+  const [session,         setSession]         = useState(null);   //Supabase session
   const [authReady,       setAuthReady]       = useState(false);
   const [jobData, setJobData] = useState(readStoredJobs);
   const [jobError, setJobError] = useState(readStoredJobError);
   const [jobLoading, setJobLoading] = useState(false);
-  // â”€â”€ listen for auth state changes (login / logout / token refresh) â”€â”€â”€â”€â”€â”€â”€â”€
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -1622,7 +1622,7 @@ export default function App() {
       <ContributorsPage {...sharedProps} />
       <LoginPage      {...sharedProps} />
       <SignupPage      {...sharedProps} />
-      <HistoryPage    {...sharedProps} />   {/* â† FIX 4 */}
+      <HistoryPage    {...sharedProps} />   {}
     </>
   );
 }

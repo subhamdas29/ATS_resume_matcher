@@ -1,20 +1,3 @@
-"""
-ml/training/evaluate.py
-
-Evaluates the trained NER model on the dev split and prints per-label
-precision, recall, and F1 scores.
-
-Run from the backend/ directory:
-    python ml/training/evaluate.py
-
-What to look for:
-  - F1 > 0.75 on HARD_SKILL and JOB_TITLE is good for a FYP.
-  - EXPERIENCE and ORGANIZATION will likely be lower — that's fine,
-    the Entity Ruler handles the high-confidence cases.
-  - If overall F1 < 0.60, try: more training steps, check your
-    label mapping, or add more annotated examples.
-"""
-
 import pathlib
 import spacy
 from spacy.tokens import DocBin

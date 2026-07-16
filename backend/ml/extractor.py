@@ -1,14 +1,3 @@
-"""
-ml/extractor.py
-
-Entry point for keyword extraction. Currently uses the Entity Ruler only.
-When the custom NER model is trained, it will be layered in here — nothing
-outside this file needs to change.
-
-Returns the same dict shape that keywords.py previously got from Groq,
-so ATS_score.py and suggestions.py are completely unaffected.
-"""
-
 import json
 import pathlib
 import spacy

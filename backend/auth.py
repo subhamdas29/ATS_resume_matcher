@@ -1,10 +1,3 @@
-"""
-auth.py
-
-FastAPI dependency that verifies the Supabase access token from the
-Authorization header and returns the authenticated user's ID.
-"""
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 

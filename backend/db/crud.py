@@ -1,10 +1,4 @@
-﻿"""
-db/crud.py
-
-Database operations for ResumePilot history.
-"""
-
-from db.database import supabase_client
+﻿from db.database import supabase_client
 
 
 def _as_list(value):
@@ -25,11 +19,7 @@ def _safe_child_insert(table_name: str, rows: list[dict]) -> None:
 
 
 def save_analysis(result: dict, job_title: str, user_id: str) -> str | None:
-    """
-    Persist an analysis linked to the authenticated user.
-    The main analyses row is the source of the History list, so child-table
-    failures are logged but do not hide the saved scorecard.
-    """
+
     try:
         analysis_row = {
             "user_id": user_id,

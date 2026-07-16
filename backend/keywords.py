@@ -1,14 +1,3 @@
-"""
-keywords.py
-
-Previously called Groq (LLaMA 3.3 70B) for keyword extraction.
-Now delegates to ml/extractor.py (Entity Ruler + custom NER).
-
-The dict shape returned by both get_keywords() and get_jd_keywords() is
-identical to what this file returned before, so ATS_score.py, suggestions.py,
-and main.py are completely unaffected.
-"""
-
 from ml.extractor import extract_keywords
 
 
